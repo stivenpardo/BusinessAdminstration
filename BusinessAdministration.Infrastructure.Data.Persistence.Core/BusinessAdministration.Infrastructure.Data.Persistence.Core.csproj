@@ -25,4 +25,8 @@
     <ProjectReference Include="..\BusinessAdministration.Domain.Core\BusinessAdministration.Domain.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="PeopleManagement\" />
+  </ItemGroup>
+
 </Project>

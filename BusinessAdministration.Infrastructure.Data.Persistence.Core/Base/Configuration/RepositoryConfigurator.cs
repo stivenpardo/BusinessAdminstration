@@ -2,7 +2,6 @@
 using BusinessAdministration.Domain.Core.PeopleManagement.Customer;
 using BusinessAdministration.Domain.Core.PeopleManagement.DocumentType;
 using BusinessAdministration.Domain.Core.PeopleManagement.Employed;
-using BusinessAdministration.Domain.Core.PeopleManagement.Person;
 using BusinessAdministration.Domain.Core.PeopleManagement.Provider;
 using BusinessAdministration.Infrastructure.Data.Persistence.Core.PeopleManagement;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,7 +17,6 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Base.Confi
             services.TryAddTransient<ICustomerRepository, CustomerRepository>();
             services.TryAddTransient<IDocumentTypeRepository, DocumentTypeRepository>();
             services.TryAddTransient<IEmployedRepository, EmployedRepository>();
-            services.TryAddTransient<IPersonRepository, PersonRepository>();
             services.TryAddTransient<IProviderRepository, ProviderRepository>();
             
             services.ConfigureContext(settings);

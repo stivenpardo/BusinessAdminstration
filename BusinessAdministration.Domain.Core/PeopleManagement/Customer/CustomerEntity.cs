@@ -1,17 +1,17 @@
-﻿using BusinessAdministration.Domain.Core.PeopleManagement.Person;
+﻿using BusinessAdministration.Domain.Core.PeopleManagement.DocumentType;
 using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BusinessAdministration.Domain.Core.PeopleManagement.Customer
 {
-    public class CustomerEntity : HumanResources
+    public class CustomerEntity : PersonBase
     {
         [Key]
         [StringLength(30)]
         public Guid CustomerId { get; set; }
         [Required]
         [StringLength(30)]
-        public Guid PersonId { get; set; }
-        public PersonEntity Person { get; set; }
+        public Guid DocumentTypeId { get; set; }
+        public DocumentTypeEntity DocumentType { get; set; }
     }
 }

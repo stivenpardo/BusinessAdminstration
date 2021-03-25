@@ -2,5 +2,5 @@
 
 namespace BusinessAdministration.Domain.Core.PeopleManagement.DocumentType
 {
-    public interface IDocumentTypeRepository : IRepositoryBase<DocumentTypeEntity> { }
+    public interface IDocumentTypeRepository : IRepositoryBase<EntityBase> { }
 }

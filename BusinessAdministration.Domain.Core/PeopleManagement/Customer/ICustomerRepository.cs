@@ -2,5 +2,5 @@
 
 namespace BusinessAdministration.Domain.Core.PeopleManagement.Customer
 {
-    public interface ICustomerRepository : IRepositoryBase<HumanResources> { }
+    public interface ICustomerRepository : IRepositoryBase<PersonBase> { }
 }

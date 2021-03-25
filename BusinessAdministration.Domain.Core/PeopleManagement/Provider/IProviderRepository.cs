@@ -2,5 +2,5 @@
 
 namespace BusinessAdministration.Domain.Core.PeopleManagement.Provider
 {
-    public interface IProviderRepository : IRepositoryBase<HumanResources> { }
+    public interface IProviderRepository : IRepositoryBase<PersonBase> { }
 }

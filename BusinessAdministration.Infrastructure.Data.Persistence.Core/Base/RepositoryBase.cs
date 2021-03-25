@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Base
 {
-    internal abstract class RepositoryBase<TGeneric> : IRepositoryBase<TGeneric> where TGeneric : EntityBase
+    public abstract class RepositoryBase<TGeneric> : IRepositoryBase<TGeneric> where TGeneric : EntityBase
     {
         private readonly IUnitOfWork _unitOfWork;
         public IUnitOfWork UnitOfWork => _unitOfWork;

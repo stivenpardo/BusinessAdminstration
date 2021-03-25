@@ -2,5 +2,5 @@
 
 namespace BusinessAdministration.Domain.Core.PeopleManagement.Area
 {
-    public interface IAreaRepository : IRepositoryBase<AreaEntity> { }
+    public interface IAreaRepository : IRepositoryBase<EntityBase> { }
 }

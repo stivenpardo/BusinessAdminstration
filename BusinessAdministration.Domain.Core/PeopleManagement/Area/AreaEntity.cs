@@ -14,6 +14,9 @@ namespace BusinessAdministration.Domain.Core.PeopleManagement.Area
         [Required]
         [StringLength(30)]
         public string AreaName { get; set; }
-        public IEnumerable<EmployedEntity> Employees { get; set; }
+        [Required]
+        [StringLength(30)]
+        public Guid ResponsableEmployedId { get; set; }
+        public IEnumerable<EmployedEntity> EmployeesList { get; set; }
     }
 }

@@ -2,3 +2,5 @@
 
     [assembly: InternalsVisibleTo("BusinessAdministration.Aplication.Core")]
     [assembly: InternalsVisibleTo("BusinessAdministration.Test.Core")]
+    [assembly: InternalsVisibleTo("BusinessAdministration.WebApi")]
+

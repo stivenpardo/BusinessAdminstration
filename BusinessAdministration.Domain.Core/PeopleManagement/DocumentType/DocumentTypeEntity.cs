@@ -1,6 +1,9 @@
 ﻿using BusinessAdministration.Domain.Core.Base;
-using BusinessAdministration.Domain.Core.PeopleManagement.Person;
+using BusinessAdministration.Domain.Core.PeopleManagement.Customer;
+using BusinessAdministration.Domain.Core.PeopleManagement.Employed;
+using BusinessAdministration.Domain.Core.PeopleManagement.Provider;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BusinessAdministration.Domain.Core.PeopleManagement.DocumentType
@@ -13,8 +16,8 @@ namespace BusinessAdministration.Domain.Core.PeopleManagement.DocumentType
         [Required]
         [StringLength(30)]
         public string DocumentType { get; set; }
-        [Required]
-        public int DocumentTypeNumber { get; set; }
-        public PersonEntity Person { get; set; }
+        public IEnumerable<ProviderEntity> ProvidersList { get; set; }
+        public IEnumerable<CustomerEntity> CustomerList { get; set; }
+        public IEnumerable<EmployedEntity> EmployeesList { get; set; }
     }
 }

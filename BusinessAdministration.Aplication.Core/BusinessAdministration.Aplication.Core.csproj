@@ -7,14 +7,20 @@
   <ItemGroup>
     <Folder Include="Base\Exceptions\" />
     <Folder Include="Assembly\" />
+    <Folder Include="PeopleManagement\Area\Mapping\" />
     <Folder Include="PeopleManagement\Exceptions\" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="10.1.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="8.1.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BusinessAdministration.Aplication.Dto\BusinessAdministration.Aplication.Dto.csproj" />
+    <ProjectReference Include="..\BusinessAdministration.Domain.Core\BusinessAdministration.Domain.Core.csproj" />
     <ProjectReference Include="..\BusinessAdministration.Infrastructure.Data.Persistence.Core\BusinessAdministration.Infrastructure.Data.Persistence.Core.csproj" />
   </ItemGroup>
 

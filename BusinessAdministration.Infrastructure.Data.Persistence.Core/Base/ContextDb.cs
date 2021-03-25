@@ -3,10 +3,10 @@ using BusinessAdministration.Domain.Core.PeopleManagement.Area;
 using BusinessAdministration.Domain.Core.PeopleManagement.Customer;
 using BusinessAdministration.Domain.Core.PeopleManagement.DocumentType;
 using BusinessAdministration.Domain.Core.PeopleManagement.Employed;
-using BusinessAdministration.Domain.Core.PeopleManagement.Person;
 using BusinessAdministration.Domain.Core.PeopleManagement.Provider;
 using BusinessAdministration.Infrastructure.Data.Persistence.Core.Base.Configuration;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using System.Linq;
 
 namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Base
@@ -16,7 +16,6 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Base
         private readonly DbSettings _settings;
 
         #region Tables Db 
-        public DbSet<PersonEntity> Person { get; set; }
         public DbSet<DocumentTypeEntity> DocumentType { get; set; }
 
         public DbSet<AreaEntity> Area { get; set; }
@@ -28,12 +27,9 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Base
         public DbSet<CustomerEntity> Customer { get; set; }
         #endregion Tables Db
 
-        //public ContextDb(IOptions<DbSettings> settings) =>
-        //    _settings = settings.Value;
-        public ContextDb() => _settings = new DbSettings
-        {
-            ConnectionString = "Server = DESKTOP-A52QQCF\\SQLEXPRESS; Database = BusinessAdministration; Trusted_Connection = True;"
-        };
+        public ContextDb(IOptions<DbSettings> settings) =>
+            _settings = settings.Value;
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) =>
            optionsBuilder.UseSqlServer(_settings.ConnectionString);
         public int Commit() => base.SaveChanges();
@@ -44,7 +40,7 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Base
             .ToList()
             .ForEach(e => e.State = EntityState.Detached);
 
-        public DbSet<T> Set<T>() where T : EntityBase => base.Set<T>();
+        public new DbSet<T> Set<T>() where T : EntityBase => base.Set<T>();
 
         public void SetDeatached<T>(T item) where T : EntityBase => Entry(item).State = EntityState.Detached;
         public void SetModified<T>(T item) where T : EntityBase => Entry(item).State = EntityState.Modified;

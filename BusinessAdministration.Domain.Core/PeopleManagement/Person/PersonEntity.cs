@@ -2,14 +2,14 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace BusinessAdministration.Domain.Core.PeopleManagement
+namespace BusinessAdministration.Domain.Core.PeopleManagement.Person
 {
     public enum PersonType
     {
         naturalPerson = 1,
-        CorporatePerson =2,
+        CorporatePerson = 2,
     }
-    public abstract class PersonBase
+    public class PersonEntity : HumanResources
     {
         [Key]
         [StringLength(30)]
@@ -25,17 +25,14 @@ namespace BusinessAdministration.Domain.Core.PeopleManagement
         [Required]
         public DateTime PersonDateOfBirth { get; set; }
         [Required]
-        public DateTime PersonCreationDate { get; set; }
-        [Required]
-        public int PersonPhoneNumber{ get; set; }
+        public int PersonPhoneNumber { get; set; }
         [Required]
         [EmailAddress]
         [StringLength(30)]
-        public string PersonEmail{ get; set; }
+        public string PersonEmail { get; set; }
         [Required]
         [StringLength(30)]
         public Guid DocumentTypeId { get; set; }
         public DocumentTypeEntity DocumentType { get; set; }
-
     }
 }

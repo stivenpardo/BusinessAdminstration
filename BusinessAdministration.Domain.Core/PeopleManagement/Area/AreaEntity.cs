@@ -1,10 +1,12 @@
-﻿using BusinessAdministration.Domain.Core.PeopleManagement.Employed;
+﻿using BusinessAdministration.Domain.Core.Base;
+using BusinessAdministration.Domain.Core.PeopleManagement.Employed;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace BusinessAdministration.Domain.Core.PeopleManagement.Area
 {
-    public class AreaEntity
+    public class AreaEntity : EntityBase
     {
         [Key]
         [StringLength(30)]
@@ -12,6 +14,6 @@ namespace BusinessAdministration.Domain.Core.PeopleManagement.Area
         [Required]
         [StringLength(30)]
         public string AreaName { get; set; }
-        public EmployedEntity Person { get; set; }
+        public IEnumerable<EmployedEntity> Employees { get; set; }
     }
 }

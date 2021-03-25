@@ -7,9 +7,9 @@ namespace BusinessAdministration.Domain.Core.Base
     {
         public int Commit();
         public void RollBack();
-        public DbSet<T> Set<T>() where T : class;
-        public void Attach<T>(T item) where T : class;
-        public void SetModified<T>(T item) where T : class;
-        public void SetDeatached<T>(T item) where T : class;
+        public DbSet<T> Set<T>() where T : EntityBase;
+        public void Attach<T>(T item) where T : EntityBase;
+        public void SetModified<T>(T item) where T : EntityBase;
+        public void SetDeatached<T>(T item) where T : EntityBase;
     }
 }

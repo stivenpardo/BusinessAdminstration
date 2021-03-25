@@ -1,9 +1,10 @@
-﻿using System;
+﻿using BusinessAdministration.Domain.Core.PeopleManagement.Person;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace BusinessAdministration.Domain.Core.PeopleManagement.Provider
 {
-    public class ProviderEntity : PersonBase
+    public class ProviderEntity : HumanResources
     {
         [Key]
         [StringLength(30)]
@@ -14,6 +15,6 @@ namespace BusinessAdministration.Domain.Core.PeopleManagement.Provider
         [Required]
         [StringLength(30)]
         public Guid PersonId { get; set; }
-        public PersonBase Person { get; set; }
+        public PersonEntity Person { get; set; }
     }
 }

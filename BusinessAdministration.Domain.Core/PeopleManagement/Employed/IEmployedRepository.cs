@@ -2,5 +2,5 @@
 
 namespace BusinessAdministration.Domain.Core.PeopleManagement.Employed
 {
-    public interface IEmployedRepository : IRepositoryBase<PersonBase> { }
+    public interface IEmployedRepository : IRepositoryBase<HumanResources> { }
 }

@@ -7,7 +7,6 @@
   <ItemGroup>
     <Folder Include="Base\Exceptions\" />
     <Folder Include="Assembly\" />
-    <Folder Include="PeopleManagement\Area\Mapping\" />
     <Folder Include="PeopleManagement\Exceptions\" />
   </ItemGroup>
 

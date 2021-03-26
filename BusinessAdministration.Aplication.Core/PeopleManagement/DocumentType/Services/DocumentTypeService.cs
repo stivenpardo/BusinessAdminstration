@@ -32,7 +32,8 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.S
         public bool DeleteDocumentType(DocumentTypeDto request)
         {
             ValidateRequireDocumentype(request);
-            throw new NotImplementedException();
+            return _repoDocumentType.Delete(_mapper.Map<DocumentTypeEntity>(request));
+
         }
 
         public Task<IEnumerable<DocumentTypeDto>> GetAll()

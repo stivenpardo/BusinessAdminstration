@@ -41,7 +41,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                      return Task.FromResult(new DocumentTypeEntity
                      {
                          DocumentTypeId = Guid.NewGuid(),
-                         DocumentType = "Fake area",
+                         DocumentType = "Fake area"
                      });
                  });
             var service = new ServiceCollection();

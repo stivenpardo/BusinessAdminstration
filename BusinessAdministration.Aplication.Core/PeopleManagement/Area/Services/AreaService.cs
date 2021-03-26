@@ -72,7 +72,9 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services
 
         public bool UpdateArea(AreaDto request)
         {
-            throw new NotImplementedException();
+            if (request.AreaId == Guid.Empty) throw new AreaIdNotDefinedException();
+
+            return _repoArea.Update(_mapper.Map<AreaEntity>(request));
         }
     }
 }

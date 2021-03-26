@@ -1,5 +1,6 @@
 ﻿using BusinessAdministration.Aplication.Core.Mapper.Configuration;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services;
+using BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.Services;
 using BusinessAdministration.Infrastructure.Data.Persistence.Core.Base.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -15,6 +16,8 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Configuration
         public static void ConfigurePeopleManagementService(this IServiceCollection services, DbSettings settings)
         {
             services.TryAddTransient<IAreaService, AreaService>();
+            services.TryAddTransient<IDocumentTypeService, DocumentTypeService>();
+
             services.ConfigureMapper();
             services.ConfigureBaseRepository(settings);
         }

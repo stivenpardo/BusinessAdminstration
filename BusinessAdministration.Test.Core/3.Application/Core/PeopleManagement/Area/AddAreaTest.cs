@@ -1,6 +1,7 @@
 ﻿using BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Configuration;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Area;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.DocumentType;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.Area;
 using BusinessAdministration.Domain.Core.PeopleManagement.Area;
 using BusinessAdministration.Domain.Core.PeopleManagement.Employed;

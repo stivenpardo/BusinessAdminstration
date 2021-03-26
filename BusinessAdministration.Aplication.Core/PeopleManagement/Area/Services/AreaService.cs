@@ -54,7 +54,9 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services
 
         public async Task<IEnumerable<AreaDto>> GetAll()
         {
-            throw new NotImplementedException();
+            var response = _mapper.Map<IEnumerable<AreaDto>>(_repoArea.GetAll<AreaEntity>());
+            if (response.Count() == 0) throw new AreaEntityIsEmptyException();
+            return response;
         }
 
         public bool DeleteArea(AreaDto request)

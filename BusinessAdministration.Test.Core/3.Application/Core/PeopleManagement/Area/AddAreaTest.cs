@@ -159,6 +159,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
         [IntegrationTest]
         public async Task AddArea_Successfull_IntegrationTest()
         {
+            //Todo: Creat Empleado, y elimnarlo al final para que no deje basura en la base de datos, igualmente para la entidad de area
             var service = new ServiceCollection();
             service.ConfigurePeopleManagementService(new DbSettings
             {

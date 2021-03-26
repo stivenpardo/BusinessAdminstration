@@ -13,7 +13,7 @@ using System.Linq.Expressions;
 using Xunit;
 using Xunit.Categories;
 
-namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.Area
+namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.Employed
 {
     public class DeleteAreaTest
     {

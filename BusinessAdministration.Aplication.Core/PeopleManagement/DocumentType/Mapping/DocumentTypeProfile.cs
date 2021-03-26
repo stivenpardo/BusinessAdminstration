@@ -6,9 +6,8 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.M
 {
     public class DocumentTypeProfile : Profile
     {
-        public DocumentTypeProfile()
-        {
+        public DocumentTypeProfile() =>
             CreateMap<DocumentTypeEntity, DocumentTypeDto>().ReverseMap();
-        }
+
     }
 }

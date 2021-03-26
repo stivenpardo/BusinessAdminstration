@@ -16,8 +16,8 @@ namespace BusinessAdministration.Domain.Core.PeopleManagement.DocumentType
         [Required]
         [StringLength(30)]
         public string DocumentType { get; set; }
-        public IEnumerable<ProviderEntity> ProvidersList { get; set; }
-        public IEnumerable<CustomerEntity> CustomerList { get; set; }
-        public IEnumerable<EmployedEntity> EmployeesList { get; set; }
+        public virtual IEnumerable<ProviderEntity> ProvidersList { get; set; }
+        public virtual IEnumerable<CustomerEntity> CustomerList { get; set; }
+        public virtual IEnumerable<EmployedEntity> EmployeesList { get; set; }
     }
 }

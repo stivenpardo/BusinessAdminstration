@@ -1,7 +1,6 @@
 ﻿using BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Configuration;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Area;
-using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.DocumentType;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.Area;
 using BusinessAdministration.Domain.Core.PeopleManagement.Area;
 using BusinessAdministration.Domain.Core.PeopleManagement.Employed;
@@ -156,30 +155,30 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             Assert.NotNull(response);
             Assert.NotEqual(default, response);
         }
-        [Fact]
-        [IntegrationTest]
-        public async Task AddArea_Successfull_IntegrationTest()
-        {
-            //Todo: Creat Empleado, y elimnarlo al final para que no deje basura en la base de datos, igualmente para la entidad de area
-            // tamnien llamar a los demas metodos como eliminar y actualizar
-            var service = new ServiceCollection();
-            service.ConfigurePeopleManagementService(new DbSettings
-            {
-                ConnectionString = "Data Source=DESKTOP-A52QQCF\\SQLEXPRESS;Initial Catalog=BusinessAdministration;Integrated Security=True"
-            });
-            var provider = service.BuildServiceProvider();
-            var areaSvc = provider.GetRequiredService<IAreaService>();
+        //[Fact]
+        //[IntegrationTest]
+        //public async Task AddArea_Successfull_IntegrationTest()
+        //{
+        //    //Todo: Creat Empleado, y elimnarlo al final para que no deje basura en la base de datos, igualmente para la entidad de area
+        //    // tamnien llamar a los demas metodos como eliminar y actualizar
+        //    var service = new ServiceCollection();
+        //    service.ConfigurePeopleManagementService(new DbSettings
+        //    {
+        //        ConnectionString = "Data Source=DESKTOP-A52QQCF\\SQLEXPRESS;Initial Catalog=BusinessAdministration;Integrated Security=True"
+        //    });
+        //    var provider = service.BuildServiceProvider();
+        //    var areaSvc = provider.GetRequiredService<IAreaService>();
 
-            var newArea = new AreaRequestDto
-            {
-                AreaName = "Fake area",
-                ResponsableEmployedId = Guid.Parse("6b499387-b805-4339-8e8b-2d8bb08ba4eb")
-            };
-            var response = await areaSvc.AddArea(newArea).ConfigureAwait(false);
+        //    var newArea = new AreaRequestDto
+        //    {
+        //        AreaName = "Fake area",
+        //        ResponsableEmployedId = Guid.Parse("6b499387-b805-4339-8e8b-2d8bb08ba4eb")
+        //    };
+        //    var response = await areaSvc.AddArea(newArea).ConfigureAwait(false);
 
-            Assert.NotNull(response);
-            Assert.NotEqual(default, response);
-        }
+        //    Assert.NotNull(response);
+        //    Assert.NotEqual(default, response);
+        //}
 
     }
 }

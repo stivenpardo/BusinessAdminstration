@@ -42,7 +42,6 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services
             var response = await _repoArea.Insert(_mapper.Map<AreaEntity>(request)).ConfigureAwait(false);
             return response.AreaId;
         }
-
         private static void ValidateRequireFields(AreaRequestDto request)
         {
             if (string.IsNullOrEmpty(request.AreaName)) throw new AreaNameNotDefinedException();
@@ -59,21 +58,18 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services
         public bool DeleteArea(AreaDto request)
         {
             if (request.AreaId == Guid.Empty) throw new AreaIdNotDefinedException();
-            
+
             var AreaIdExist = _repoEmployed
                 .SearchMatching<EmployedEntity>(employed => employed.AreaId == request.AreaId)
                 .Any();
             if (AreaIdExist)
                 throw new AreaIdIsAssociatedToEmployedException(request.AreaId.ToString());
 
-            return _repoArea.Delete(_mapper.Map<AreaEntity>(request));              
+            return _repoArea.Delete(_mapper.Map<AreaEntity>(request));
         }
-
-
         public bool UpdateArea(AreaDto request)
         {
             if (request.AreaId == Guid.Empty) throw new AreaIdNotDefinedException();
-
             return _repoArea.Update(_mapper.Map<AreaEntity>(request));
         }
     }

@@ -12,6 +12,5 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.Mapping
             CreateMap<AreaEntity, AreaRequestDto>().ReverseMap();
             CreateMap<AreaEntity, AreaResponseDto>().ReverseMap();
         }
-
     }
 }

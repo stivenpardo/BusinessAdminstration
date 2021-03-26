@@ -23,7 +23,6 @@ namespace BusinessAdministration.Domain.Core.PeopleManagement.Employed
         [Required]
         [StringLength(30)]
         public Guid DocumentTypeId { get; set; }
-        public DocumentTypeEntity DocumentType{ get; set; }
-
+        public virtual DocumentTypeEntity DocumentType{ get; set; }
     }
 }

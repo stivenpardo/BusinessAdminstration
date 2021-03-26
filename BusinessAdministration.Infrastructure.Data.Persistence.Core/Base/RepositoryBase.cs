@@ -1,6 +1,7 @@
 ﻿using BusinessAdministration.Domain.Core.Base;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
@@ -56,10 +57,10 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Base
                 return false;
             }
         }
-        public IEnumerable SearchMatching<T>(Expression<Func<T, bool>> predicate) where T : EntityBase =>
+        public IEnumerable<T> SearchMatching<T>(Expression<Func<T, bool>> predicate) where T : EntityBase =>
             _unitOfWork.Set<T>().Where(predicate);
 
-        public IEnumerable GetAll<T>() where T : EntityBase => _unitOfWork.Set<T>().ToArray();
+        public IEnumerable<T> GetAll<T>() where T : EntityBase => _unitOfWork.Set<T>().ToArray();
 
         public T SearchMatchingOneResult<T>(Expression<Func<T, bool>> predicate) where T : EntityBase =>
             _unitOfWork.Set<T>().First(predicate);

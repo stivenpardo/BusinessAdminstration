@@ -28,6 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BusinessAdministration.Aplication.Core\BusinessAdministration.Aplication.Core.csproj" />
     <ProjectReference Include="..\BusinessAdministration.Infrastructure.Data.Persistence.Core\BusinessAdministration.Infrastructure.Data.Persistence.Core.csproj" />
   </ItemGroup>
 

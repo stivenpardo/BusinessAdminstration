@@ -60,6 +60,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             Assert.NotNull(response);
             Assert.NotEqual(default, response);
         }
+        //TODO: MICHAEL, hacer el test de integración con todos los métodos
         //[Fact]
         //[IntegrationTest]
         //public async Task AddArea_Successfull_IntegrationTest()

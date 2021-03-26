@@ -4,6 +4,7 @@ using BusinessAdministration.Aplication.Dto.PeopleManagement.DocumentType;
 using BusinessAdministration.Domain.Core.PeopleManagement.DocumentType;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.Services
@@ -36,16 +37,17 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.S
 
         }
 
-        public Task<IEnumerable<DocumentTypeDto>> GetAll()
+        public async Task<IEnumerable<DocumentTypeDto>> GetAll()
         {
-            throw new NotImplementedException();
+            var response = _mapper.Map<IEnumerable<DocumentTypeDto>>(_repoDocumentType.GetAll<DocumentTypeEntity>());
+            if (response.Count() == 0) throw new DocumentTypeEntityIsEmptyException();
+            return response;
         }
 
         public bool UpdateDocumentType(DocumentTypeDto request)
         {
             ValidateRequireDocumentype(request);
-
-            throw new NotImplementedException();
+            return _repoDocumentType.Update(_mapper.Map<DocumentTypeEntity>(request));
         }
     }
 }

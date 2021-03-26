@@ -45,11 +45,8 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services
 
         private static void ValidateRequireFields(AreaRequestDto request)
         {
-            if (string.IsNullOrEmpty(request.AreaName))
-                throw new AreaNameNotDefinedException();
-
-            if (request.ResponsableEmployedId == Guid.Empty)
-                throw new AreaLiableEmployeedIdNotDefinedException();
+            if (string.IsNullOrEmpty(request.AreaName)) throw new AreaNameNotDefinedException();
+            if (request.ResponsableEmployedId == Guid.Empty) throw new AreaLiableEmployeedIdNotDefinedException();
         }
 
         public async Task<IEnumerable<AreaDto>> GetAll()
@@ -61,7 +58,15 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services
 
         public bool DeleteArea(AreaDto request)
         {
-            throw new NotImplementedException();
+            if (request.AreaId == Guid.Empty) throw new AreaIdNotDefinedException();
+            
+            var AreaIdExist = _repoEmployed
+                .SearchMatching<EmployedEntity>(employed => employed.AreaId == request.AreaId)
+                .Any();
+            if (AreaIdExist)
+                throw new AreaIdIsAssociatedToEmployedException(request.AreaId.ToString());
+
+            return _repoArea.Delete(_mapper.Map<AreaEntity>(request));              
         }
 
 

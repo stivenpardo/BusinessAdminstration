@@ -5,9 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Base\Exceptions\" />
     <Folder Include="Assembly\" />
-    <Folder Include="PeopleManagement\Exceptions\" />
+    <Folder Include="PeopleManagement\Exceptions\Employed\" />
   </ItemGroup>
 
   <ItemGroup>

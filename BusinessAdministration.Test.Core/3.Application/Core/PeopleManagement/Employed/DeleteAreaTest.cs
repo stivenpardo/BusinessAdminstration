@@ -42,7 +42,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 .Setup(e => e.SearchMatching(It.IsAny<Expression<Func<EmployedEntity, bool>>>()))
                 .Returns(new List<EmployedEntity> { new EmployedEntity {
                     EmployedId = Guid.NewGuid(),
-                    Name = "fakeName",
+                    PersonName = "fakeName",
                     AreaId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4fe")
                 } });
             var service = new ServiceCollection();

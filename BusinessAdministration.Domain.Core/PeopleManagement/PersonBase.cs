@@ -17,16 +17,16 @@ namespace BusinessAdministration.Domain.Core.PeopleManagement
         public virtual PersonType PersonType { get; set; }
         [Required]
         [StringLength(30)]
-        public string Name { get; set; }
+        public string PersonName { get; set; }
         [Required]
         [StringLength(30)]
-        public string LastName { get; set; }
+        public string PersonLastName { get; set; }
         [Required]
-        public DateTimeOffset DateOfBirth { get; set; }
+        public DateTimeOffset PersonDateOfBirth { get; set; }
         [Required]
         public DateTimeOffset CreationDate { get; set; }
         [Required]
-        public long PhoneNumber { get; set; }
+        public long PersonPhoneNumber { get; set; }
         [Required]
         [EmailAddress]
         [StringLength(30)]

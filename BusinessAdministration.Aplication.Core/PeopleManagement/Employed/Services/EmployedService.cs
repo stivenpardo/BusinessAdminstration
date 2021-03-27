@@ -28,7 +28,7 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
             //TODO: Implemented test for each one aceptation criterial for persons an employed 
             ValidateRequireFields(request);
             var employeesByName = _repoEmployed
-                .SearchMatching<EmployedEntity>(e => e.Name == request.Name);
+                .SearchMatching<EmployedEntity>(e => e.PersonName == request.Name);
 
             if (employeesByName.Any())
                 throw new AlreadyExistException($"ya existe alguien con el nombre:  {request.IdentificationNumber}");

@@ -6,11 +6,12 @@ namespace BusinessAdministration.Domain.Core.PeopleManagement
 {
     public enum PersonType
     {
-        naturalPerson = 1,
+        NaturalPerson = 1,
         CorporatePerson = 2,
     }
     public abstract class PersonBase : EntityBase
     {
+        [Required]
         public long IdentificationNumber { get; set; }
         [Required]
         public virtual PersonType PersonType { get; set; }
@@ -23,7 +24,7 @@ namespace BusinessAdministration.Domain.Core.PeopleManagement
         [Required]
         public DateTimeOffset DateOfBirth { get; set; }
         [Required]
-        public DateTimeOffset creationDate { get; set; }
+        public DateTimeOffset CreationDate { get; set; }
         [Required]
         public long PhoneNumber { get; set; }
         [Required]

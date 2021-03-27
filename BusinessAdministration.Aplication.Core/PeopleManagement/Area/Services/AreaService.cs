@@ -33,7 +33,7 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services
                 throw new AreaEmployeIdDontExistException(request.ResponsableEmployedId.ToString());
 
             var employedLiableExist = _repoArea
-                .SearchMatching<AreaEntity>(area => area.ResponsableEmployedId == request.ResponsableEmployedId)
+                .SearchMatching<AreaEntity>(area => area.LiableEmployerId == request.ResponsableEmployedId)
                 .Any();
 
             if (employedLiableExist)

@@ -171,7 +171,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
         //    var newEmployed = new EmployedDto
         //    {
         //        AreaName = "Fake area",
-        //        ResponsableEmployedId = Guid.Parse("6b499387-b805-4339-8e8b-2d8bb08ba4eb")
+        //        LiableEmployerId = Guid.Parse("6b499387-b805-4339-8e8b-2d8bb08ba4eb")
         //    };
         //    var response = await employedSvc.AddArea(newEmployed).ConfigureAwait(false);
 

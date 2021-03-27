@@ -35,7 +35,7 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
 
             var employeesByNameAndId = employeesByName.Where(x => x.IdentificationNumber == request.IdentificationNumber);
             if (employeesByNameAndId.Any())
-                throw new AlreadyExistException($"ya existe alguien con la combinacion de nombre: {request.name} el nombre:  {request.IdentificationNumber}");
+                throw new AlreadyExistException($"ya existe alguien con la combinacion de nombre: {request.Name} el nombre:  {request.IdentificationNumber}");
 
             throw new NotImplementedException();
         }

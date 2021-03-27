@@ -92,7 +92,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 {
                     AreaId = Guid.NewGuid(),
                     AreaName = "Fake area",
-                    ResponsableEmployedId =  Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4fe")
+                    LiableEmployerId =  Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4fe")
                 }});
 
             var service = new ServiceCollection();
@@ -135,7 +135,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                      { 
                          AreaId = Guid.NewGuid(),
                          AreaName = "Fake area",
-                         ResponsableEmployedId = Guid.NewGuid()
+                         LiableEmployerId = Guid.NewGuid()
                      });
                  });
             var service = new ServiceCollection();
@@ -172,7 +172,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
         //    var newArea = new AreaRequestDto
         //    {
         //        AreaName = "Fake area",
-        //        ResponsableEmployedId = Guid.Parse("6b499387-b805-4339-8e8b-2d8bb08ba4eb")
+        //        LiableEmployerId = Guid.Parse("6b499387-b805-4339-8e8b-2d8bb08ba4eb")
         //    };
         //    var response = await areaSvc.AddArea(newArea).ConfigureAwait(false);
 

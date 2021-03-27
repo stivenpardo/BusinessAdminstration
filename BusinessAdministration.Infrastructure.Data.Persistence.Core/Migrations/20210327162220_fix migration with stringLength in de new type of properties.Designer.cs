@@ -4,14 +4,16 @@ using BusinessAdministration.Infrastructure.Data.Persistence.Core.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
 {
     [DbContext(typeof(ContextDb))]
-    partial class ContextDbModelSnapshot : ModelSnapshot
+    [Migration("20210327162220_fix migration with stringLength in de new type of properties")]
+    partial class fixmigrationwithstringLengthindenewtypeofproperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -31,7 +33,7 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<Guid>("LiableEmployerId")
+                    b.Property<Guid>("ResponsableEmployedId")
                         .HasMaxLength(30)
                         .HasColumnType("uniqueidentifier");
 
@@ -46,9 +48,6 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(30)
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("CreationDate")
-                        .HasColumnType("datetimeoffset");
 
                     b.Property<DateTimeOffset>("DateOfBirth")
                         .HasColumnType("datetimeoffset");
@@ -80,6 +79,9 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
 
                     b.Property<long>("PhoneNumber")
                         .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("creationDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("CustomerId");
 
@@ -115,9 +117,6 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                     b.Property<Guid>("AreaId")
                         .HasMaxLength(30)
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("CreationDate")
-                        .HasColumnType("datetimeoffset");
 
                     b.Property<DateTimeOffset>("DateOfBirth")
                         .HasColumnType("datetimeoffset");
@@ -156,6 +155,9 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                     b.Property<long>("PhoneNumber")
                         .HasColumnType("bigint");
 
+                    b.Property<DateTimeOffset>("creationDate")
+                        .HasColumnType("datetimeoffset");
+
                     b.HasKey("EmployedId");
 
                     b.HasIndex("AreaId");
@@ -171,9 +173,6 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                         .ValueGeneratedOnAdd()
                         .HasMaxLength(30)
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTimeOffset>("CreationDate")
-                        .HasColumnType("datetimeoffset");
 
                     b.Property<DateTimeOffset>("DateOfBirth")
                         .HasColumnType("datetimeoffset");
@@ -210,6 +209,9 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
 
                     b.Property<long>("PhoneNumber")
                         .HasColumnType("bigint");
+
+                    b.Property<DateTimeOffset>("creationDate")
+                        .HasColumnType("datetimeoffset");
 
                     b.HasKey("ProviderId");
 

@@ -44,13 +44,13 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 {
                     AreaId= Guid.NewGuid(),
                     AreaName = "fake name",
-                    ResponsableEmployedId = Guid.NewGuid()
+                    LiableEmployerId = Guid.NewGuid()
                 },
                  new AreaEntity
                 {
                     AreaId= Guid.NewGuid(),
                     AreaName = "fake name2",
-                    ResponsableEmployedId = Guid.NewGuid()
+                    LiableEmployerId = Guid.NewGuid()
                 }});
 
             var service = new ServiceCollection();

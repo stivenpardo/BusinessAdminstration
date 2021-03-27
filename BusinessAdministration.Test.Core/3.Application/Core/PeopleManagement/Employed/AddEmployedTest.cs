@@ -38,38 +38,38 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
 
             await Assert.ThrowsAsync<EmployedCodeNotDefinedException>(() => employedSvc.AddEmployed(new EmployedDto
             {
-                EmployeeCode = Guid.Empty,
+                EmployedCode = default,
                 AreaId = Guid.NewGuid(),
                 DocumentTypeId = Guid.NewGuid(),
-                DateOfBirth = DateTimeOffset.Now,
-                creationDate = DateTimeOffset.Now,
+                PersonDateOfBirth = DateTimeOffset.Now,
+                CreationDate = DateTimeOffset.Now,
             })).ConfigureAwait(false);
 
             await Assert.ThrowsAsync<AreaIdNotDefinedException>(() => employedSvc.AddEmployed(new EmployedDto
             {
-                EmployeeCode = Guid.NewGuid(),
+                EmployedCode = EmployedCode.Mg,
                 AreaId = Guid.Empty,
                 DocumentTypeId = Guid.NewGuid(),
-                DateOfBirth = DateTimeOffset.Now,
-                creationDate = DateTimeOffset.Now,
+                PersonDateOfBirth = DateTimeOffset.Now,
+                CreationDate = DateTimeOffset.Now,
             })).ConfigureAwait(false);
 
             await Assert.ThrowsAsync<DocumentTypeIdNotDefinedException>(() => employedSvc.AddEmployed(new EmployedDto
             {
-                EmployeeCode = Guid.NewGuid(),
+                EmployedCode = EmployedCode.Mg,
                 AreaId = Guid.NewGuid(),
                 DocumentTypeId = Guid.Empty,
-                DateOfBirth = DateTimeOffset.Now,
-                creationDate = DateTimeOffset.Now,
+                PersonDateOfBirth = DateTimeOffset.Now,
+                CreationDate = DateTimeOffset.Now,
             })).ConfigureAwait(false);
 
             await Assert.ThrowsAsync<DateOfBirthNotDefinedException>(() => employedSvc.AddEmployed(new EmployedDto
             {
-                EmployeeCode = Guid.NewGuid(),
+                EmployedCode = EmployedCode.Mg,
                 AreaId = Guid.NewGuid(),
                 DocumentTypeId = Guid.NewGuid(),
-                DateOfBirth = default,
-                creationDate = DateTimeOffset.Now,
+                PersonDateOfBirth = default,
+                CreationDate = DateTimeOffset.Now,
             })).ConfigureAwait(false);
         }
 
@@ -83,14 +83,13 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
 
             await Assert.ThrowsAsync<CreationDateNotDefinedException>(() => employedSvc.AddEmployed(new EmployedDto
             {
-                EmployeeCode = Guid.NewGuid(),
+                EmployedCode = EmployedCode.Mg,
                 AreaId = Guid.NewGuid(),
                 DocumentTypeId = Guid.NewGuid(),
-                DateOfBirth = DateTimeOffset.Now,
-                creationDate = default,
+                PersonDateOfBirth = DateTimeOffset.Now,
+                CreationDate = default,
             })).ConfigureAwait(false);
         }
-
 
         [Fact]
         [UnitTest]
@@ -109,12 +108,12 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
 
             var newEmployed = new EmployedDto
             {
-                EmployeeCode = Guid.NewGuid(),
+                EmployedCode = EmployedCode.Mg,
                 AreaId = Guid.NewGuid(),
                 DocumentTypeId = Guid.NewGuid(),
                 IdentificationNumber = 123,
-                DateOfBirth = DateTimeOffset.Now,
-                creationDate = DateTimeOffset.Now,
+                PersonDateOfBirth = DateTimeOffset.Now,
+                CreationDate = DateTimeOffset.Now,
             };
             var response = await Assert.ThrowsAsync<AlreadyExistException>(() =>
                 employedSvc.AddEmployed(newEmployed)).ConfigureAwait(false);
@@ -139,13 +138,13 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
 
             var newEmployed = new EmployedDto
             {
-                EmployeeCode = Guid.NewGuid(),
+                EmployedCode = EmployedCode.Mg,
                 AreaId = Guid.NewGuid(),
                 DocumentTypeId = Guid.NewGuid(),
                 IdentificationNumber = 123,
-                DateOfBirth = DateTimeOffset.Now,
-                creationDate = DateTimeOffset.Now,
-                Name = "pepito",
+                PersonDateOfBirth = DateTimeOffset.Now,
+                CreationDate = DateTimeOffset.Now,
+                PersonName = "pepito",
                 PersonType = PersonType.CorporatePerson
             };
             var response = await Assert.ThrowsAsync<AlreadyExistException>(() =>
@@ -178,6 +177,5 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
         //    Assert.NotNull(response);
         //    Assert.NotEqual(default, response);
         //}
-
     }
 }

@@ -30,25 +30,25 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             await Assert.ThrowsAsync<AreaNameNotDefinedException>(() => areaSvc.AddArea(new AreaRequestDto
             {
                 AreaName = string.Empty,
-                ResponsableEmployedId = Guid.NewGuid()
+                LiableEmployerId = Guid.NewGuid()
             })).ConfigureAwait(false);
 
             await Assert.ThrowsAsync<AreaNameNotDefinedException>(() => areaSvc.AddArea(new AreaRequestDto
             {
                 AreaName = null,
-                ResponsableEmployedId = Guid.NewGuid()
+                LiableEmployerId = Guid.NewGuid()
             })).ConfigureAwait(false);
 
             await Assert.ThrowsAsync<AreaLiableEmployeedIdNotDefinedException>(() => areaSvc.AddArea(new AreaRequestDto
             {
                 AreaName = "Fake area",
-                ResponsableEmployedId = Guid.Empty
+                LiableEmployerId = Guid.Empty
             })).ConfigureAwait(false);
 
             await Assert.ThrowsAsync<AreaLiableEmployeedIdNotDefinedException>(() => areaSvc.AddArea(new AreaRequestDto
             {
                 AreaName = "Fake area",
-                ResponsableEmployedId = default
+                LiableEmployerId = default
             })).ConfigureAwait(false);
         }
         [Fact]
@@ -68,11 +68,11 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             var newArea = new AreaRequestDto
             {
                 AreaName = "Fake area",
-                ResponsableEmployedId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4fe")
+                LiableEmployerId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4fe")
             };
             var response = await Assert.ThrowsAsync<AreaEmployeIdDontExistException>(() =>
                areaSvc.AddArea(newArea)).ConfigureAwait(false);
-            Assert.Equal(newArea.ResponsableEmployedId.ToString(), response.Message);
+            Assert.Equal(newArea.LiableEmployerId.ToString(), response.Message);
         }
         [Fact]
         [UnitTest]
@@ -105,11 +105,11 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             var newArea = new AreaRequestDto
             {
                 AreaName = "Fake area",
-                ResponsableEmployedId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4fe")
+                LiableEmployerId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4fe")
             };
             var response = await Assert.ThrowsAsync<AreaLiableAlreadyExistException>(() =>
                 areaSvc.AddArea(newArea)).ConfigureAwait(false);
-            Assert.Equal(newArea.ResponsableEmployedId.ToString(), response.Message);
+            Assert.Equal(newArea.LiableEmployerId.ToString(), response.Message);
         }
 
         [Fact]
@@ -148,7 +148,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             var newArea = new AreaRequestDto
             {
                 AreaName = "Fake area",
-                ResponsableEmployedId = Guid.NewGuid()
+                LiableEmployerId = Guid.NewGuid()
             };
 
             var response = await areaSvc.AddArea(newArea).ConfigureAwait(false);

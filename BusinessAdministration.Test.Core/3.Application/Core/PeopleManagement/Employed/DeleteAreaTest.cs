@@ -30,7 +30,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             {
                 AreaId = Guid.Empty,
                 AreaName = "fake name",
-                ResponsableEmployedId = Guid.NewGuid()
+                LiableEmployerId = Guid.NewGuid()
             }));
         }
         [Fact]
@@ -55,7 +55,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             {
                 AreaId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4fe"),
                 AreaName = "Fake area",
-                ResponsableEmployedId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4de")
+                LiableEmployerId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4de")
             };
             var response = Assert.Throws<AreaIdIsAssociatedToEmployedException>(() =>
                areaSvc.DeleteArea(newArea));

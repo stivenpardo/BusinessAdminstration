@@ -27,17 +27,17 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services
             ValidateRequireFields(request);
 
             var employedIdExist = _repoEmployed
-                .SearchMatching<EmployedEntity>(employed => employed.EmployedId == request.ResponsableEmployedId)
+                .SearchMatching<EmployedEntity>(employed => employed.EmployedId == request.LiableEmployerId)
                 .Any();
             if (!employedIdExist)
-                throw new AreaEmployeIdDontExistException(request.ResponsableEmployedId.ToString());
+                throw new AreaEmployeIdDontExistException(request.LiableEmployerId.ToString());
 
             var employedLiableExist = _repoArea
-                .SearchMatching<AreaEntity>(area => area.LiableEmployerId == request.ResponsableEmployedId)
+                .SearchMatching<AreaEntity>(area => area.LiableEmployerId == request.LiableEmployerId)
                 .Any();
 
             if (employedLiableExist)
-                throw new AreaLiableAlreadyExistException(request.ResponsableEmployedId.ToString());
+                throw new AreaLiableAlreadyExistException(request.LiableEmployerId.ToString());
 
             var response = await _repoArea.Insert(_mapper.Map<AreaEntity>(request)).ConfigureAwait(false);
             return response.AreaId;
@@ -45,7 +45,7 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services
         private static void ValidateRequireFields(AreaRequestDto request)
         {
             if (string.IsNullOrEmpty(request.AreaName)) throw new AreaNameNotDefinedException();
-            if (request.ResponsableEmployedId == Guid.Empty) throw new AreaLiableEmployeedIdNotDefinedException();
+            if (request.LiableEmployerId == Guid.Empty) throw new AreaLiableEmployeedIdNotDefinedException();
         }
 
         public async Task<IEnumerable<AreaDto>> GetAll()

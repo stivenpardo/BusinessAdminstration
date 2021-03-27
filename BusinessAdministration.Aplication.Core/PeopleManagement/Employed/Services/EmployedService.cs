@@ -28,14 +28,14 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
             //TODO: Implemented test for each one aceptation criterial for persons an employed 
             ValidateRequireFields(request);
             var employeesByName = _repoEmployed
-                .SearchMatching<EmployedEntity>(e => e.PersonName == request.Name);
+                .SearchMatching<EmployedEntity>(e => e.PersonName == request.PersonName);
 
             if (employeesByName.Any())
                 throw new AlreadyExistException($"ya existe alguien con el nombre:  {request.IdentificationNumber}");
 
             var employeesByNameAndId = employeesByName.Where(x => x.IdentificationNumber == request.IdentificationNumber);
             if (employeesByNameAndId.Any())
-                throw new AlreadyExistException($"ya existe alguien con la combinacion de nombre: {request.Name} el nombre:  {request.IdentificationNumber}");
+                throw new AlreadyExistException($"ya existe alguien con la combinacion de nombre: {request.PersonName} el nombre:  {request.IdentificationNumber}");
 
             throw new NotImplementedException();
         }
@@ -56,11 +56,11 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
         }
         private static void ValidateRequireFields(EmployedDto request)
         {
-            if (request.EmployeeCode == Guid.Empty) throw new EmployedCodeNotDefinedException();
+            if (request.EmployedCode == default) throw new EmployedCodeNotDefinedException();
             if (request.AreaId == Guid.Empty) throw new AreaIdNotDefinedException();
             if (request.DocumentTypeId == Guid.Empty) throw new DocumentTypeIdNotDefinedException();
-            if (request.DateOfBirth == default) throw new DateOfBirthNotDefinedException();
-            if (request.creationDate == default) throw new CreationDateNotDefinedException();
+            if (request.PersonDateOfBirth == default) throw new DateOfBirthNotDefinedException();
+            if (request.CreationDate == default) throw new CreationDateNotDefinedException();
 
         }
     }

@@ -39,7 +39,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
 
             await Assert.ThrowsAsync<AreaIdNotDefinedException>(() => employedSvc.AddEmployed(new EmployedDto
             {
-                EmployedCode = EmployedCode.Mg,
+                EmployedCode = Guid.NewGuid(),
                 AreaId = Guid.Empty,
                 DocumentTypeId = Guid.NewGuid(),
                 PersonDateOfBirth = DateTimeOffset.Now,
@@ -48,7 +48,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
 
             await Assert.ThrowsAsync<DocumentTypeIdNotDefinedException>(() => employedSvc.AddEmployed(new EmployedDto
             {
-                EmployedCode = EmployedCode.Mg,
+                EmployedCode = Guid.NewGuid(),
                 AreaId = Guid.NewGuid(),
                 DocumentTypeId = Guid.Empty,
                 PersonDateOfBirth = DateTimeOffset.Now,
@@ -57,7 +57,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
 
             await Assert.ThrowsAsync<DateOfBirthNotDefinedException>(() => employedSvc.AddEmployed(new EmployedDto
             {
-                EmployedCode = EmployedCode.Mg,
+                EmployedCode = Guid.NewGuid(),
                 AreaId = Guid.NewGuid(),
                 DocumentTypeId = Guid.NewGuid(),
                 PersonDateOfBirth = default,
@@ -74,7 +74,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
 
             await Assert.ThrowsAsync<CreationDateNotDefinedException>(() => employedSvc.AddEmployed(new EmployedDto
             {
-                EmployedCode = EmployedCode.Mg,
+                EmployedCode = Guid.NewGuid(),
                 AreaId = Guid.NewGuid(),
                 DocumentTypeId = Guid.NewGuid(),
                 PersonDateOfBirth = DateTimeOffset.Now,
@@ -91,7 +91,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 .Setup(m => m.GetAll<EmployedEntity>())
                 .Returns(new List<EmployedEntity> { new EmployedEntity
                 {
-                   EmployedCode = EmployedCode.Mg,
+                   EmployedCode = Guid.NewGuid(),
                    AreaId = Guid.NewGuid(),
                    PersonName = "Pepito"
                 }});
@@ -104,7 +104,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
 
             var newEmployed = new EmployedDto
             {
-                EmployedCode = EmployedCode.Mg,
+                EmployedCode = Guid.NewGuid(),
                 AreaId = Guid.NewGuid(),
                 DocumentTypeId = Guid.NewGuid(),
                 IdentificationNumber = 123,
@@ -126,7 +126,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 .Setup(m => m.GetAll<EmployedEntity>())
                 .Returns(new List<EmployedEntity> { new EmployedEntity
                 {
-                   EmployedCode = EmployedCode.Mg,
+                   EmployedCode = Guid.NewGuid(),
                    AreaId = Guid.NewGuid(),
                    DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0592"),
                    IdentificationNumber = 123,
@@ -141,7 +141,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
 
             var newEmployed = new EmployedDto
             {
-                EmployedCode = EmployedCode.Mg,
+                EmployedCode = Guid.NewGuid(),
                 AreaId = Guid.NewGuid(),
                 DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0592"),
                 IdentificationNumber = 123,
@@ -163,7 +163,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 .Setup(m => m.GetAll<EmployedEntity>())
                 .Returns(new List<EmployedEntity> { new EmployedEntity
                 {
-                   EmployedCode = EmployedCode.Mg,
+                   EmployedCode = Guid.NewGuid(),
                    AreaId = Guid.NewGuid(),
                    DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0592"),
                    IdentificationNumber = 183,
@@ -178,7 +178,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
 
             var newEmployed = new EmployedDto
             {
-                EmployedCode = EmployedCode.Mg,
+                EmployedCode = Guid.NewGuid(),
                 AreaId = Guid.NewGuid(),
                 DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0597"),
                 IdentificationNumber = 123,
@@ -203,7 +203,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 .Setup(m => m.GetAll<EmployedEntity>())
                 .Returns(new List<EmployedEntity> { new EmployedEntity
                 {
-                   EmployedCode = EmployedCode.Mg,
+                   EmployedCode = Guid.NewGuid(),
                    AreaId = Guid.NewGuid(),
                    DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0598"),
                    IdentificationNumber = 183,
@@ -220,7 +220,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
 
             var newEmployed = new EmployedDto
             {
-                EmployedCode = EmployedCode.Mg,
+                EmployedCode = Guid.NewGuid(),
                 AreaId = Guid.NewGuid(),
                 PersonDateOfBirth = DateTimeOffset.Now,
                 CreationDate = DateTimeOffset.Now,
@@ -245,7 +245,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
         //        .Setup(m => m.GetAll<EmployedEntity>())
         //        .Returns(new List<EmployedEntity> { new EmployedEntity
         //        {
-        //           EmployedCode = EmployedCode.Mg,
+        //           EmployedCode = Guid.NewGuid(),
         //           AreaId = Guid.NewGuid(),
         //           DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0598"),
         //           IdentificationNumber = 183,
@@ -262,7 +262,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
 
         //    var newEmployed = new EmployedDto
         //    {
-        //        EmployedCode = EmployedCode.Mg,
+        //        EmployedCode = Guid.NewGuid(),
         //        AreaId = Guid.NewGuid(),
         //        PersonDateOfBirth = DateTimeOffset.Now,
         //        CreationDate = DateTimeOffset.Now,

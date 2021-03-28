@@ -13,7 +13,7 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                 {
                     AreaId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 30, nullable: false),
                     AreaName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    ResponsableEmployedId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 30, nullable: false)
+                    LiableEmployerId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 30, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,25 +38,24 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                 {
                     CustomerId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 30, nullable: false),
                     DocumentTypeId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 30, nullable: false),
-                    DocumentEntityDocumentTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IdentificationNumber = table.Column<long>(type: "bigint", nullable: false),
                     PersonType = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    DateOfBirth = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    creationDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    PhoneNumber = table.Column<long>(type: "bigint", nullable: false),
+                    PersonName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    PersonLastName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    PersonDateOfBirth = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreationDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    PersonPhoneNumber = table.Column<long>(type: "bigint", nullable: false),
                     PersonEmail = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Customer", x => x.CustomerId);
                     table.ForeignKey(
-                        name: "FK_Customer_DocumentType_DocumentEntityDocumentTypeId",
-                        column: x => x.DocumentEntityDocumentTypeId,
+                        name: "FK_Customer_DocumentType_DocumentTypeId",
+                        column: x => x.DocumentTypeId,
                         principalTable: "DocumentType",
                         principalColumn: "DocumentTypeId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -64,18 +63,17 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                 columns: table => new
                 {
                     EmployedId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 30, nullable: false),
-                    EmployeeCode = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    EmployedCode = table.Column<Guid>(type: "uniqueidentifier", maxLength: 30, nullable: false),
                     PersonType = table.Column<int>(type: "int", nullable: false),
-                    EmployedPosition = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    EmployedPosition = table.Column<int>(type: "int", nullable: false),
                     AreaId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 30, nullable: false),
                     DocumentTypeId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 30, nullable: false),
-                    DocumentEntityDocumentTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IdentificationNumber = table.Column<long>(type: "bigint", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    DateOfBirth = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    creationDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    PhoneNumber = table.Column<long>(type: "bigint", nullable: false),
+                    PersonName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    PersonLastName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    PersonDateOfBirth = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreationDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    PersonPhoneNumber = table.Column<long>(type: "bigint", nullable: false),
                     PersonEmail = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
                 },
                 constraints: table =>
@@ -88,11 +86,11 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                         principalColumn: "AreaId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Employed_DocumentType_DocumentEntityDocumentTypeId",
-                        column: x => x.DocumentEntityDocumentTypeId,
+                        name: "FK_Employed_DocumentType_DocumentTypeId",
+                        column: x => x.DocumentTypeId,
                         principalTable: "DocumentType",
                         principalColumn: "DocumentTypeId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -102,31 +100,30 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                     ProviderId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 30, nullable: false),
                     PersonBusinessName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     DocumentTypeId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 30, nullable: false),
-                    DocumentEntityDocumentTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     IdentificationNumber = table.Column<long>(type: "bigint", nullable: false),
                     PersonType = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    LastName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    DateOfBirth = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    creationDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
-                    PhoneNumber = table.Column<long>(type: "bigint", nullable: false),
+                    PersonName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    PersonLastName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    PersonDateOfBirth = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    CreationDate = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: false),
+                    PersonPhoneNumber = table.Column<long>(type: "bigint", nullable: false),
                     PersonEmail = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Provider", x => x.ProviderId);
                     table.ForeignKey(
-                        name: "FK_Provider_DocumentType_DocumentEntityDocumentTypeId",
-                        column: x => x.DocumentEntityDocumentTypeId,
+                        name: "FK_Provider_DocumentType_DocumentTypeId",
+                        column: x => x.DocumentTypeId,
                         principalTable: "DocumentType",
                         principalColumn: "DocumentTypeId",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Customer_DocumentEntityDocumentTypeId",
+                name: "IX_Customer_DocumentTypeId",
                 table: "Customer",
-                column: "DocumentEntityDocumentTypeId");
+                column: "DocumentTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Employed_AreaId",
@@ -134,14 +131,14 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                 column: "AreaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Employed_DocumentEntityDocumentTypeId",
+                name: "IX_Employed_DocumentTypeId",
                 table: "Employed",
-                column: "DocumentEntityDocumentTypeId");
+                column: "DocumentTypeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Provider_DocumentEntityDocumentTypeId",
+                name: "IX_Provider_DocumentTypeId",
                 table: "Provider",
-                column: "DocumentEntityDocumentTypeId");
+                column: "DocumentTypeId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

@@ -123,8 +123,9 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("EmployedCode")
-                        .HasColumnType("int");
+                    b.Property<Guid>("EmployedCode")
+                        .HasMaxLength(30)
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("EmployedPosition")
                         .HasColumnType("int");

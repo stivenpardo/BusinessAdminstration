@@ -12,21 +12,14 @@ namespace BusinessAdministration.Domain.Core.PeopleManagement.Employed
         Analyst =3,
         Testesr = 4
     }
-    public enum EmployedCode
-    {
-        //TODO: Michael, changes this enum because is not unic code for each employed
-        Mg= 1,
-        Dv=2,
-        Anl=3,
-        Tst=4
-    }
     public class EmployedEntity : PersonBase
     {
         [Key]
         [StringLength(30)]
         public Guid EmployedId { get; set; }
         [Required]
-        public EmployedCode EmployedCode { get; set; }
+        [StringLength(30)]
+        public Guid EmployedCode { get; set; }
         [Required]
         public override PersonType PersonType => PersonType.NaturalPerson;
         [Required]

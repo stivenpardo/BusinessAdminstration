@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
 {
     [DbContext(typeof(ContextDb))]
-    [Migration("20210325054719_First Migration")]
+    [Migration("20210328024801_First Migration")]
     partial class FirstMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -33,7 +33,7 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<Guid>("ResponsableEmployedId")
+                    b.Property<Guid>("LiableEmployerId")
                         .HasMaxLength(30)
                         .HasColumnType("uniqueidentifier");
 
@@ -49,11 +49,8 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("DateOfBirth")
+                    b.Property<DateTimeOffset>("CreationDate")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid?>("DocumentEntityDocumentTypeId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("DocumentTypeId")
                         .HasMaxLength(30)
@@ -62,33 +59,33 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                     b.Property<long>("IdentificationNumber")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                    b.Property<DateTimeOffset>("PersonDateOfBirth")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("PersonEmail")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<string>("PersonLastName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("PersonName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<long>("PersonPhoneNumber")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("PersonType")
                         .HasColumnType("int");
 
-                    b.Property<long>("PhoneNumber")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTimeOffset>("creationDate")
-                        .HasColumnType("datetimeoffset");
-
                     b.HasKey("CustomerId");
 
-                    b.HasIndex("DocumentEntityDocumentTypeId");
+                    b.HasIndex("DocumentTypeId");
 
                     b.ToTable("Customer");
                 });
@@ -121,56 +118,52 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("DateOfBirth")
+                    b.Property<DateTimeOffset>("CreationDate")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid?>("DocumentEntityDocumentTypeId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("DocumentTypeId")
                         .HasMaxLength(30)
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("EmployedPosition")
-                        .IsRequired()
+                    b.Property<Guid>("EmployedCode")
                         .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<Guid>("EmployeeCode")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("EmployedPosition")
+                        .HasColumnType("int");
 
                     b.Property<long>("IdentificationNumber")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                    b.Property<DateTimeOffset>("PersonDateOfBirth")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("PersonEmail")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
-                    b.Property<int>("PersonType")
-                        .HasColumnType("int");
+                    b.Property<string>("PersonLastName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
-                    b.Property<long>("PhoneNumber")
+                    b.Property<string>("PersonName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<long>("PersonPhoneNumber")
                         .HasColumnType("bigint");
 
-                    b.Property<DateTimeOffset>("creationDate")
-                        .HasColumnType("datetimeoffset");
+                    b.Property<int>("PersonType")
+                        .HasColumnType("int");
 
                     b.HasKey("EmployedId");
 
                     b.HasIndex("AreaId");
 
-                    b.HasIndex("DocumentEntityDocumentTypeId");
+                    b.HasIndex("DocumentTypeId");
 
                     b.ToTable("Employed");
                 });
@@ -182,11 +175,8 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                         .HasMaxLength(30)
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTimeOffset>("DateOfBirth")
+                    b.Property<DateTimeOffset>("CreationDate")
                         .HasColumnType("datetimeoffset");
-
-                    b.Property<Guid?>("DocumentEntityDocumentTypeId")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("DocumentTypeId")
                         .HasMaxLength(30)
@@ -195,49 +185,51 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                     b.Property<long>("IdentificationNumber")
                         .HasColumnType("bigint");
 
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
-
                     b.Property<string>("PersonBusinessName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
+
+                    b.Property<DateTimeOffset>("PersonDateOfBirth")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("PersonEmail")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
+                    b.Property<string>("PersonLastName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("PersonName")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<long>("PersonPhoneNumber")
+                        .HasColumnType("bigint");
+
                     b.Property<int>("PersonType")
                         .HasColumnType("int");
 
-                    b.Property<long>("PhoneNumber")
-                        .HasColumnType("bigint");
-
-                    b.Property<DateTimeOffset>("creationDate")
-                        .HasColumnType("datetimeoffset");
-
                     b.HasKey("ProviderId");
 
-                    b.HasIndex("DocumentEntityDocumentTypeId");
+                    b.HasIndex("DocumentTypeId");
 
                     b.ToTable("Provider");
                 });
 
             modelBuilder.Entity("BusinessAdministration.Domain.Core.PeopleManagement.Customer.CustomerEntity", b =>
                 {
-                    b.HasOne("BusinessAdministration.Domain.Core.PeopleManagement.DocumentType.DocumentTypeEntity", "DocumentEntity")
+                    b.HasOne("BusinessAdministration.Domain.Core.PeopleManagement.DocumentType.DocumentTypeEntity", "DocumentType")
                         .WithMany("CustomerList")
-                        .HasForeignKey("DocumentEntityDocumentTypeId");
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("DocumentEntity");
+                    b.Navigation("DocumentType");
                 });
 
             modelBuilder.Entity("BusinessAdministration.Domain.Core.PeopleManagement.Employed.EmployedEntity", b =>
@@ -248,22 +240,26 @@ namespace BusinessAdministration.Infrastructure.Data.Persistence.Core.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("BusinessAdministration.Domain.Core.PeopleManagement.DocumentType.DocumentTypeEntity", "DocumentEntity")
+                    b.HasOne("BusinessAdministration.Domain.Core.PeopleManagement.DocumentType.DocumentTypeEntity", "DocumentType")
                         .WithMany("EmployeesList")
-                        .HasForeignKey("DocumentEntityDocumentTypeId");
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Area");
 
-                    b.Navigation("DocumentEntity");
+                    b.Navigation("DocumentType");
                 });
 
             modelBuilder.Entity("BusinessAdministration.Domain.Core.PeopleManagement.Provider.ProviderEntity", b =>
                 {
-                    b.HasOne("BusinessAdministration.Domain.Core.PeopleManagement.DocumentType.DocumentTypeEntity", "DocumentEntity")
+                    b.HasOne("BusinessAdministration.Domain.Core.PeopleManagement.DocumentType.DocumentTypeEntity", "DocumentType")
                         .WithMany("ProvidersList")
-                        .HasForeignKey("DocumentEntityDocumentTypeId");
+                        .HasForeignKey("DocumentTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("DocumentEntity");
+                    b.Navigation("DocumentType");
                 });
 
             modelBuilder.Entity("BusinessAdministration.Domain.Core.PeopleManagement.Area.AreaEntity", b =>

@@ -8,7 +8,7 @@ namespace BusinessAdministration.Aplication.Dto.PeopleManagement.Employed
     {
         public Guid EmployedId { get; set; }
         public  PersonType PersonType { get; set; }
-        public EmployedCode EmployedCode { get; set; }
+        public Guid EmployedCode { get; set; }
         public EmployedPosition EmployedPosition { get; set; }
         public Guid AreaId { get; set; }
     }

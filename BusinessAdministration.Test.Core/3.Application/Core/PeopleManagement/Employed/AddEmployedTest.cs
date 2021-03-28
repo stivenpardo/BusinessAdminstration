@@ -6,6 +6,7 @@ using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Employe
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Person;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.Employed;
 using BusinessAdministration.Domain.Core.PeopleManagement;
+using BusinessAdministration.Domain.Core.PeopleManagement.Area;
 using BusinessAdministration.Domain.Core.PeopleManagement.DocumentType;
 using BusinessAdministration.Domain.Core.PeopleManagement.Employed;
 using BusinessAdministration.Infrastructure.Data.Persistence.Core.Base.Configuration;
@@ -13,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Categories;
@@ -236,49 +238,136 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             Assert.Equal($"Una empleado no puede ser: { newEmployed.PersonType}", response.Message);
         }
 
-        //[Fact]
-        //[UnitTest]
-        //public async Task Throw_CannotBeCorporatePerson_when_Employed_Dont_have_unic_code()
-        //{
-        //    var employedRepoMock = new Mock<IEmployedRepository>();
-        //    employedRepoMock
-        //        .Setup(m => m.GetAll<EmployedEntity>())
-        //        .Returns(new List<EmployedEntity> { new EmployedEntity
-        //        {
-        //           EmployedCode = Guid.NewGuid(),
-        //           AreaId = Guid.NewGuid(),
-        //           DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0598"),
-        //           IdentificationNumber = 183,
-        //           PersonName="Juanito",
-        //           DocumentType = new DocumentTypeEntity { DocumentType = "Cédula"},
-        //           PersonType = PersonType.CorporatePerson
+        [Fact]
+        [UnitTest]
+        public async Task Throw_CannotBeCorporatePerson_when_Employed_Dont_have_unic_code()
+        {
+            var employedRepoMock = new Mock<IEmployedRepository>();
+            employedRepoMock
+                .Setup(m => m.GetAll<EmployedEntity>())
+                .Returns(new List<EmployedEntity> { new EmployedEntity
+                {
+                   AreaId = Guid.NewGuid(),
+                   DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0598"),
+                   IdentificationNumber = 183,
+                   PersonName="Juanito",
+                   DocumentType = new DocumentTypeEntity { DocumentType = "Cédula"},
+                   PersonType = PersonType.NaturalPerson,
+                   EmployedCode = Guid.Parse("57c3aa7a-7e24-44db-89a8-711a75395160")
 
-        //        }});
-        //    var service = new ServiceCollection();
-        //    service.AddTransient(_ => employedRepoMock.Object);
-        //    service.ConfigurePeopleManagementService(new DbSettings());
-        //    var provider = service.BuildServiceProvider();
-        //    var employedSvc = provider.GetRequiredService<IEmployedService>();
+                }});
+            var service = new ServiceCollection();
+            service.AddTransient(_ => employedRepoMock.Object);
+            service.ConfigurePeopleManagementService(new DbSettings());
+            var provider = service.BuildServiceProvider();
+            var employedSvc = provider.GetRequiredService<IEmployedService>();
 
-        //    var newEmployed = new EmployedDto
-        //    {
-        //        EmployedCode = Guid.NewGuid(),
-        //        AreaId = Guid.NewGuid(),
-        //        PersonDateOfBirth = DateTimeOffset.Now,
-        //        CreationDate = DateTimeOffset.Now,
-        //        DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0597"),
-        //        IdentificationNumber = 123,
-        //        PersonName = "Juanita",
-        //        DocumentType = "Nit",
-        //        PersonType = PersonType.NaturalPerson
-        //    };
-        //    var response = await Assert.ThrowsAsync<CannotBeCorporatePersonException>(() =>
-        //        employedSvc.AddEmployed(newEmployed)).ConfigureAwait(false);
-        //    Assert.NotNull(response);
-        //    Assert.Equal($"Una empleado no puede ser: { newEmployed.PersonType}", response.Message);
-        //}
+            var newEmployed = new EmployedDto
+            {
+                AreaId = Guid.NewGuid(),
+                PersonDateOfBirth = DateTimeOffset.Now,
+                CreationDate = DateTimeOffset.Now,
+                DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0597"),
+                IdentificationNumber = 123,
+                PersonName = "Juanita",
+                DocumentType = "Nit",
+                PersonType = PersonType.NaturalPerson,
+                EmployedCode = Guid.Parse("57c3aa7a-7e24-44db-89a8-711a75395160")
+            };
+            var response = await Assert.ThrowsAsync<CannotBeCorporatePersonException>(() =>
+                employedSvc.AddEmployed(newEmployed)).ConfigureAwait(false);
+            Assert.NotNull(response);
+            Assert.Equal($"El empleado no tiene un código unnico: { newEmployed.EmployedCode}", response.Message);
+        }
+        
+        [Fact]
+        [UnitTest]
+        public async Task Throw_NotExistAreaException_when_IdArea_Dont_Exist()
+        {
+            var areaRepoMock = new Mock<IAreaRepository>();
+            areaRepoMock
+                 .Setup(m => m.SearchMatching(It.IsAny<Expression<Func<AreaEntity, bool>>>()))
+                 .Returns(new List<AreaEntity>());
+            var employedRepoMock = new Mock<IEmployedRepository>();
+            employedRepoMock
+                .Setup(m => m.GetAll<EmployedEntity>())
+                .Returns(new List<EmployedEntity> { new EmployedEntity
+                {
+                   AreaId = Guid.NewGuid(),
+                   DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0598"),
+                   IdentificationNumber = 183,
+                   PersonName="Juanito",
+                   DocumentType = new DocumentTypeEntity { DocumentType = "Cédula"},
+                   PersonType = PersonType.NaturalPerson,
+                   EmployedCode = Guid.Parse("57c3aa7a-7e24-44db-89a8-711a75395160")
 
+                }});
+            var service = new ServiceCollection();
+            service.AddTransient(_ => employedRepoMock.Object);
+            service.AddTransient(_ => areaRepoMock.Object);
+            service.ConfigurePeopleManagementService(new DbSettings());
+            var provider = service.BuildServiceProvider();
+            var employedSvc = provider.GetRequiredService<IEmployedService>();
 
+            var newEmployed = new EmployedDto
+            {
+                AreaId = Guid.NewGuid(),
+                PersonDateOfBirth = DateTimeOffset.Now,
+                CreationDate = DateTimeOffset.Now,
+                DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0597"),
+                IdentificationNumber = 123,
+                PersonName = "Juanita",
+                DocumentType = "Nit",
+                PersonType = PersonType.NaturalPerson,
+                EmployedCode = Guid.Parse("67c3aa7a-7e24-44db-89a8-711a75395160")
+            };
+            var response = await Assert.ThrowsAsync<NotExistAreaException>(() =>
+                employedSvc.AddEmployed(newEmployed)).ConfigureAwait(false);
+            Assert.NotNull(response);
+            Assert.Equal($"No existe el area del siguiente Id: { newEmployed.AreaId}", response.Message);
+        }
+
+        [Fact]
+        [UnitTest]
+        public async Task Throw_AlreadyExistException_when_Area_already_was_asignate()
+        {
+            var employedRepoMock = new Mock<IEmployedRepository>();
+            employedRepoMock
+                .Setup(m => m.GetAll<EmployedEntity>())
+                .Returns(new List<EmployedEntity> { new EmployedEntity
+                {
+                   AreaId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0598"),
+                   DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0598"),
+                   IdentificationNumber = 183,
+                   PersonName="Juanito",
+                   DocumentType = new DocumentTypeEntity { DocumentType = "Cédula"},
+                   PersonType = PersonType.NaturalPerson,
+                   EmployedCode = Guid.Parse("57c3aa7a-7e24-44db-89a8-711a75395161")
+
+                }});
+            var service = new ServiceCollection();
+            service.AddTransient(_ => employedRepoMock.Object);
+            service.ConfigurePeopleManagementService(new DbSettings());
+            var provider = service.BuildServiceProvider();
+            var employedSvc = provider.GetRequiredService<IEmployedService>();
+
+            var newEmployed = new EmployedDto
+            {
+                AreaId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0598"),
+                PersonDateOfBirth = DateTimeOffset.Now,
+                CreationDate = DateTimeOffset.Now,
+                DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0597"),
+                IdentificationNumber = 123,
+                PersonName = "Juanita",
+                DocumentType = "Nit",
+                PersonType = PersonType.NaturalPerson,
+                EmployedCode = Guid.Parse("57c3aa7a-7e24-44db-89a8-711a75395160")
+            };
+            var response = await Assert.ThrowsAsync<AlreadyExistException>(() =>
+                employedSvc.AddEmployed(newEmployed)).ConfigureAwait(false);
+            Assert.NotNull(response);
+            Assert.Equal($"la area : { newEmployed.AreaId} ya fue asignada", response.Message);
+        }
         //[Fact]
         //[IntegrationTest]
         //public async Task AddArea_Successfull_IntegrationTest()

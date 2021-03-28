@@ -4,6 +4,7 @@ using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Documen
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Employed;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Person;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.Employed;
+using BusinessAdministration.Domain.Core.PeopleManagement.Area;
 using BusinessAdministration.Domain.Core.PeopleManagement.Employed;
 using System;
 using System.Collections.Generic;
@@ -15,11 +16,13 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
     internal class EmployedService : IEmployedService
     {
         private readonly IEmployedRepository _repoEmployed;
+        private readonly IAreaRepository _repoArea;
         private readonly IMapper _mapper;
 
-        public EmployedService(IEmployedRepository repoEmployed, IMapper mapper)
+        public EmployedService(IEmployedRepository repoEmployed, IMapper mapper, IAreaRepository repoArea)
         {
             _repoEmployed = repoEmployed;
+            _repoArea = repoArea;
             _mapper = mapper;
         }
 
@@ -31,24 +34,15 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
             ValidateIfExistSameName(request, employees);
             ValidateDontHaveDocumentTypeNit(request, employees);
             ValidateCannotBeCorporatePerson(request, employees);
+            ValidateHaveUniqueCode(request, employees);
+            ValidateAsginatedArea(request, employees);
+
+            var areaExist = _repoArea.SearchMatching<AreaEntity>(a => a.AreaId == request.AreaId).Any();
+            if (!areaExist) throw new NotExistAreaException($"No existe el area del siguiente Id: { request.AreaId}");
             throw new NotImplementedException();
         }
 
-        public void ValidateDontHaveDocumentTypeNit(EmployedDto request, IEnumerable<EmployedEntity> people)
-        {
-            var validateByDocumentType = people.Where(x => x.DocumentType.DocumentType == request.DocumentType);
-
-            if (validateByDocumentType.Any())
-                throw new CannotBeCorporatePersonException($"Una persona no puede tener un tipo de documento: { request.DocumentType}");
-        }
-        public void ValidateCannotBeCorporatePerson(EmployedDto request, IEnumerable<EmployedEntity> people)
-        {
-            var validateCorporatePerson = people.Where(x => x.PersonType == request.PersonType);
-
-            if (!validateCorporatePerson.Any())
-                throw new CannotBeCorporatePersonException($"Una empleado no puede ser: { request.PersonType}");
-        }
-
+        #region validations generals for people
         public void ValidateIfExistTheSameIdentification(EmployedDto request, IEnumerable<EmployedEntity> people)
         {
             var validateByIdentificactionNumber = people.Where(x =>
@@ -56,14 +50,44 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
             if (validateByIdentificactionNumber.Any())
                 throw new AlreadyExistException($"ya existe alguien el mismo numero de indentificación y tipo de documento: {request.IdentificationNumber}");
         }
-
         public void ValidateIfExistSameName(EmployedDto request, IEnumerable<EmployedEntity> people)
         {
             var employeesByName = people.Where(e => e.PersonName == request.PersonName);
             if (employeesByName.Any())
                 throw new AlreadyExistException($"ya existe alguien con el nombre:  {request.PersonName}");
         }
+        public void ValidateDontHaveDocumentTypeNit(EmployedDto request, IEnumerable<EmployedEntity> people)
+        {
+            var validateByDocumentType = people.Where(x => x.DocumentType.DocumentType == request.DocumentType);
 
+            if (validateByDocumentType.Any())
+                throw new CannotBeCorporatePersonException($"Una persona no puede tener un tipo de documento: { request.DocumentType}");
+        }
+        #endregion validations generals for people
+        #region validations for employed
+        public void ValidateCannotBeCorporatePerson(EmployedDto request, IEnumerable<EmployedEntity> people)
+        {
+            var validateCorporatePerson = people.Where(x => x.PersonType == request.PersonType);
+
+            if (!validateCorporatePerson.Any())
+                throw new CannotBeCorporatePersonException($"Una empleado no puede ser: { request.PersonType}");
+        }
+        public void ValidateHaveUniqueCode(EmployedDto request, IEnumerable<EmployedEntity> people)
+        {
+            var validateUniqueCode= people.Where(x => x.EmployedCode == request.EmployedCode);
+
+            if (validateUniqueCode.Any())
+                throw new CannotBeCorporatePersonException($"El empleado no tiene un código unnico: { request.EmployedCode}");
+        } 
+        public void ValidateAsginatedArea(EmployedDto request, IEnumerable<EmployedEntity> people)
+        {
+            var validateAreaExist= people.Where(x => x.AreaId == request.AreaId);
+
+            if (validateAreaExist.Any())
+                throw new AlreadyExistException($"la area : { request.AreaId} ya fue asignada");
+        }
+
+        #endregion 
         public bool DeleteEmployed(EmployedRequestDto request)
         {
             throw new NotImplementedException();

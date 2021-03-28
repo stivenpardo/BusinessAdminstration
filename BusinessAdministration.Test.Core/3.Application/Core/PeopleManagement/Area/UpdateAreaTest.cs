@@ -1,12 +1,15 @@
 ﻿using BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Configuration;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Area;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Person;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.Area;
 using BusinessAdministration.Domain.Core.PeopleManagement.Area;
 using BusinessAdministration.Infrastructure.Data.Persistence.Core.Base.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
+using System.Collections.Generic;
+using System.Linq.Expressions;
 using Xunit;
 using Xunit.Categories;
 
@@ -30,12 +33,38 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 LiableEmployerId = Guid.NewGuid()
             }));
         }
+        [Fact]
+        [UnitTest]
+        public void Throw_DontExistIdException_when_id_it_isnt()
+        {
+            var areaRepoMock = new Mock<IAreaRepository>();
+            areaRepoMock
+                 .Setup(x => x.SearchMatching(It.IsAny<Expression<Func<AreaEntity, bool>>>()))
+                 .Returns(new List<AreaEntity>());
+            var service = new ServiceCollection();
+            service.AddTransient(_ => areaRepoMock.Object);
+            service.ConfigurePeopleManagementService(new DbSettings());
+            var provider = service.BuildServiceProvider();
+            var areaSvc = provider.GetRequiredService<IAreaService>();
+
+            var newDocumentType = new AreaDto
+            {
+                AreaId = Guid.NewGuid()
+            };
+            Assert.Throws<DontExistIdException>(() => areaSvc.UpdateArea(newDocumentType));
+        }
 
         [Fact]
         [UnitTest]
         public void UpdateArea_Successfult_Test()
         {
             var areaRepoMock = new Mock<IAreaRepository>();
+            areaRepoMock
+                 .Setup(x => x.SearchMatching(It.IsAny<Expression<Func<AreaEntity, bool>>>()))
+                 .Returns(new List<AreaEntity> { new AreaEntity
+                 {
+                     AreaId= Guid.NewGuid()
+                 }});
             areaRepoMock
                  .Setup(x => x.Update(It.IsAny<AreaEntity>()))
                  .Returns(() =>

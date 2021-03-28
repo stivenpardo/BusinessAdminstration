@@ -15,7 +15,7 @@ using Xunit.Categories;
 
 namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.Employed
 {
-    public class DeleteAreaTest
+    public class DeleteEmployedTest
     {
         [Fact]
         [UnitTest]

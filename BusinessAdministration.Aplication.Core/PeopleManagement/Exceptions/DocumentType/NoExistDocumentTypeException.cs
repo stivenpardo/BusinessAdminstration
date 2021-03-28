@@ -2,6 +2,7 @@
 
 namespace BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.DocumentType
 {
-    public class DocumentTypeNotDefinedException : SypException { }
-
+    public class NoExistDocumentTypeException : SypException
+    {
+    }
 }

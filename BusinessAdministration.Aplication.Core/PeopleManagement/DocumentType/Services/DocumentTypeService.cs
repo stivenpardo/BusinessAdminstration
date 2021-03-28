@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.DocumentType;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Person;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.DocumentType;
 using BusinessAdministration.Domain.Core.PeopleManagement.DocumentType;
 using System;
@@ -26,17 +27,12 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.S
             var response = await _repoDocumentType.Insert(_mapper.Map<DocumentTypeEntity>(request)).ConfigureAwait(false);
             return response.DocumentTypeId;
         }
-        private static void ValidateRequireDocumentype(DocumentTypeDto request)
-        {
-            if (request.DocumentTypeId == Guid.Empty) throw new DocumentTypeIdNotDefinedException();
-        }
         public bool DeleteDocumentType(DocumentTypeDto request)
         {
             ValidateRequireDocumentype(request);
+            ValidateDocumentTypeIdExist(request);
             return _repoDocumentType.Delete(_mapper.Map<DocumentTypeEntity>(request));
-
         }
-
         public async Task<IEnumerable<DocumentTypeDto>> GetAll()
         {
             var response = _mapper.Map<IEnumerable<DocumentTypeDto>>(_repoDocumentType.GetAll<DocumentTypeEntity>());
@@ -47,7 +43,18 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.S
         public bool UpdateDocumentType(DocumentTypeDto request)
         {
             ValidateRequireDocumentype(request);
+            ValidateDocumentTypeIdExist(request);
             return _repoDocumentType.Update(_mapper.Map<DocumentTypeEntity>(request));
+        }
+        private void ValidateDocumentTypeIdExist(DocumentTypeDto request)
+        {
+            var documentTypeIdExist = _repoDocumentType
+                            .SearchMatching<DocumentTypeEntity>(dt => dt.DocumentTypeId == request.DocumentTypeId).Any();
+            if (!documentTypeIdExist) throw new DontExistIdException();
+        }
+        private static void ValidateRequireDocumentype(DocumentTypeDto request)
+        {
+            if (request.DocumentTypeId == Guid.Empty) throw new DocumentTypeIdNotDefinedException();
         }
     }
 }

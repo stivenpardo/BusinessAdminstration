@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Area;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Person;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.Area;
 using BusinessAdministration.Domain.Core.PeopleManagement.Area;
 using BusinessAdministration.Domain.Core.PeopleManagement.Employed;
@@ -42,11 +43,6 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services
             var response = await _repoArea.Insert(_mapper.Map<AreaEntity>(request)).ConfigureAwait(false);
             return response.AreaId;
         }
-        private static void ValidateRequireFields(AreaRequestDto request)
-        {
-            if (string.IsNullOrEmpty(request.AreaName)) throw new AreaNameNotDefinedException();
-            if (request.LiableEmployerId == Guid.Empty) throw new AreaLiableEmployeedIdNotDefinedException();
-        }
 
         public async Task<IEnumerable<AreaDto>> GetAll()
         {
@@ -57,20 +53,36 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services
 
         public bool DeleteArea(AreaDto request)
         {
-            if (request.AreaId == Guid.Empty) throw new AreaIdNotDefinedException();
-
-            var AreaIdExist = _repoEmployed
+            ValidateAreIdRequired(request);
+            ValidationAreIdExist(request);
+            var lialEmployedId = _repoEmployed
                 .SearchMatching<EmployedEntity>(employed => employed.AreaId == request.AreaId)
                 .Any();
-            if (AreaIdExist)
-                throw new AreaIdIsAssociatedToEmployedException(request.AreaId.ToString());
+            if (lialEmployedId)
+                throw new AreaIdIsAssociatedToEmployedException($"Este id: {request.AreaId} ya esta asociado con un empleado");
 
             return _repoArea.Delete(_mapper.Map<AreaEntity>(request));
         }
         public bool UpdateArea(AreaDto request)
         {
-            if (request.AreaId == Guid.Empty) throw new AreaIdNotDefinedException();
+            ValidateAreIdRequired(request);
+            ValidationAreIdExist(request);
             return _repoArea.Update(_mapper.Map<AreaEntity>(request));
+        }
+        private static void ValidateRequireFields(AreaRequestDto request)
+        {
+            if (string.IsNullOrEmpty(request.AreaName)) throw new AreaNameNotDefinedException();
+            if (request.LiableEmployerId == Guid.Empty) throw new AreaLiableEmployeedIdNotDefinedException();
+        }
+        private static void ValidateAreIdRequired(AreaDto request)
+        {
+            if (request.AreaId == Guid.Empty) 
+                throw new AreaIdNotDefinedException();
+        }
+        private void ValidationAreIdExist(AreaDto request)
+        {
+            var areaIdExist = _repoArea.SearchMatching<AreaEntity>(a => a.AreaId == request.AreaId).Any();
+            if (!areaIdExist) throw new DontExistIdException();
         }
     }
 }

@@ -13,7 +13,7 @@ using Xunit.Categories;
 
 namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.Employed
 {
-    public class GetAllAreaTest
+    public class GetAllEmployedTest
     {
         [Fact]
         [UnitTest]

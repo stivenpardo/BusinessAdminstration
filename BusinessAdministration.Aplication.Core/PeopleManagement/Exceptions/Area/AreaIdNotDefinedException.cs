@@ -4,5 +4,8 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Are
 {
     public class AreaIdNotDefinedException : SypException
     {
+        public AreaIdNotDefinedException() { }
+        public AreaIdNotDefinedException(string message) : base(message) { }
+        
     }
 }

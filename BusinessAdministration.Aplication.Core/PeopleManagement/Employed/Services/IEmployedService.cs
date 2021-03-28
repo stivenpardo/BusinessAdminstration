@@ -7,7 +7,7 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
 {
     public interface IEmployedService
     {
-        public Task<Guid?> AddEmployed(EmployedDto request);
+        public Task<Guid> AddEmployed(EmployedDto request);
         public Task<IEnumerable<EmployedDto>> GetAll();
         public bool UpdateEmployed(EmployedDto request);
         public bool DeleteEmployed(EmployedRequestDto request);

@@ -5,6 +5,7 @@ using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Employe
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Person;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.Employed;
 using BusinessAdministration.Domain.Core.PeopleManagement.Area;
+using BusinessAdministration.Domain.Core.PeopleManagement.DocumentType;
 using BusinessAdministration.Domain.Core.PeopleManagement.Employed;
 using System;
 using System.Collections.Generic;
@@ -17,16 +18,18 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
     {
         private readonly IEmployedRepository _repoEmployed;
         private readonly IAreaRepository _repoArea;
+        private readonly IDocumentTypeRepository _repoDocumentType;
         private readonly IMapper _mapper;
 
-        public EmployedService(IEmployedRepository repoEmployed, IMapper mapper, IAreaRepository repoArea)
+        public EmployedService(IEmployedRepository repoEmployed, IMapper mapper, IAreaRepository repoArea, IDocumentTypeRepository repoDocumentType)
         {
             _repoEmployed = repoEmployed;
             _repoArea = repoArea;
+            _repoDocumentType = repoDocumentType;
             _mapper = mapper;
         }
 
-        public async Task<Guid?> AddEmployed(EmployedDto request)
+        public async Task<Guid> AddEmployed(EmployedDto request)
         {
             ValidateRequireFields(request);
             var employees = _repoEmployed.GetAll<EmployedEntity>();
@@ -39,7 +42,8 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
 
             var areaExist = _repoArea.SearchMatching<AreaEntity>(a => a.AreaId == request.AreaId).Any();
             if (!areaExist) throw new NotExistAreaException($"No existe el area del siguiente Id: { request.AreaId}");
-            throw new NotImplementedException();
+            var response = await _repoEmployed.Insert(_mapper.Map<EmployedEntity>(request)).ConfigureAwait(false);
+            return response.EmployedId;
         }
 
         #region validations generals for people
@@ -58,10 +62,14 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
         }
         public void ValidateDontHaveDocumentTypeNit(EmployedDto request, IEnumerable<EmployedEntity> people)
         {
-            var validateByDocumentType = people.Where(x => x.DocumentType.DocumentType == request.DocumentType);
+            var documentIdExist = _repoDocumentType
+                .SearchMatching<DocumentTypeEntity>(dt => dt.DocumentTypeId == request.DocumentTypeId);
+            if (!documentIdExist.Any())
+                throw new NoExistDocumentTypeException();
+            var documentIsNit = documentIdExist.Where(x => x.DocumentType.ToLower() == "nit");
 
-            if (validateByDocumentType.Any())
-                throw new CannotBeCorporatePersonException($"Una persona no puede tener un tipo de documento: { request.DocumentType}");
+            if (documentIsNit.Any())
+                throw new CannotBeCorporatePersonException("Una persona no puede tener un tipo de documento Nit");
         }
         #endregion validations generals for people
         #region validations for employed
@@ -84,7 +92,7 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
             var validateAreaExist= people.Where(x => x.AreaId == request.AreaId);
 
             if (validateAreaExist.Any())
-                throw new AlreadyExistException($"la area : { request.AreaId} ya fue asignada");
+                throw new AlreadyExistException($"La area : { request.AreaId} ya fue asignada");
         }
 
         #endregion 

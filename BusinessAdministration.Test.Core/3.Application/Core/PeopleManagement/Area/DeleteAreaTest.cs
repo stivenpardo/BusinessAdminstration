@@ -1,6 +1,7 @@
 ﻿using BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Configuration;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Area;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Person;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.Area;
 using BusinessAdministration.Domain.Core.PeopleManagement.Area;
 using BusinessAdministration.Domain.Core.PeopleManagement.Employed;
@@ -35,8 +36,36 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
         }
         [Fact]
         [UnitTest]
+        public void Throw_DontExistIdException_when_id_it_isnt()
+        {
+            var areaRepoMock = new Mock<IAreaRepository>();
+            areaRepoMock
+                 .Setup(x => x.SearchMatching(It.IsAny<Expression<Func<AreaEntity, bool>>>()))
+                 .Returns(new List<AreaEntity>());
+            var service = new ServiceCollection();
+            service.AddTransient(_ => areaRepoMock.Object);
+            service.ConfigurePeopleManagementService(new DbSettings());
+            var provider = service.BuildServiceProvider();
+            var areaSvc = provider.GetRequiredService<IAreaService>();
+
+            var newDocumentType = new AreaDto
+            {
+                AreaId = Guid.NewGuid()
+            };
+            Assert.Throws<DontExistIdException>(() => areaSvc.DeleteArea(newDocumentType));
+        }
+        [Fact]
+        [UnitTest]
         public void Throw_Exception_When_AreaId_is_associate_to_employed()
         {
+            var areaRepoMock = new Mock<IAreaRepository>();
+            areaRepoMock
+                 .Setup(x => x.SearchMatching(It.IsAny<Expression<Func<AreaEntity, bool>>>()))
+                 .Returns(new List<AreaEntity> { new AreaEntity
+                 {
+                     AreaId= Guid.NewGuid()
+                 }});
+
             var employedRepoMock = new Mock<IEmployedRepository>();
             employedRepoMock
                 .Setup(e => e.SearchMatching(It.IsAny<Expression<Func<EmployedEntity, bool>>>()))
@@ -47,6 +76,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 } });
             var service = new ServiceCollection();
             service.AddTransient(_ => employedRepoMock.Object);
+            service.AddTransient(_ => areaRepoMock.Object);
             service.ConfigurePeopleManagementService(new DbSettings());
             var provider = service.BuildServiceProvider();
             var areaSvc = provider.GetRequiredService<IAreaService>();
@@ -59,7 +89,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             };
             var response = Assert.Throws<AreaIdIsAssociatedToEmployedException>(() =>
                areaSvc.DeleteArea(newArea));
-            Assert.Equal(newArea.AreaId.ToString(), response.Message);
+            Assert.Equal($"Este id: {newArea.AreaId} ya esta asociado con un empleado", response.Message);
         }
         [Fact]
         [UnitTest]
@@ -71,6 +101,12 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 .Returns(new List<EmployedEntity>());
 
             var areaRepoMock = new Mock<IAreaRepository>();
+            areaRepoMock
+                .Setup(x => x.SearchMatching(It.IsAny<Expression<Func<AreaEntity, bool>>>()))
+                .Returns(new List<AreaEntity> { new AreaEntity
+                 {
+                     AreaId= Guid.NewGuid()
+                 }});
             areaRepoMock
                  .Setup(x => x.Delete(It.IsAny<AreaEntity>()))
                  .Returns(() =>

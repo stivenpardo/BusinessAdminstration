@@ -13,6 +13,5 @@ namespace BusinessAdministration.Aplication.Dto.PeopleManagement
         public long PersonPhoneNumber { get; set; }
         public string PersonEmail { get; set; }
         public Guid DocumentTypeId { get; set; }
-        public string DocumentType { get; set; } 
     }
 }

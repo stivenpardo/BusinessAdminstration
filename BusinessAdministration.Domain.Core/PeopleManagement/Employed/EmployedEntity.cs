@@ -14,6 +14,7 @@ namespace BusinessAdministration.Domain.Core.PeopleManagement.Employed
     }
     public enum EmployedCode
     {
+        //TODO: Michael, changes this enum because is not unic code for each employed
         Mg= 1,
         Dv=2,
         Anl=3,

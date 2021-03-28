@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Services
 {
-    public class EmployedService : IEmployedService
+    internal class EmployedService : IEmployedService
     {
         private readonly IEmployedRepository _repoEmployed;
         private readonly IMapper _mapper;
@@ -25,19 +25,43 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
 
         public async Task<Guid?> AddEmployed(EmployedDto request)
         {
-            //TODO: Implemented test for each one aceptation criterial for persons an employed 
             ValidateRequireFields(request);
-            var employeesByName = _repoEmployed
-                .SearchMatching<EmployedEntity>(e => e.PersonName == request.PersonName);
-
-            if (employeesByName.Any())
-                throw new AlreadyExistException($"ya existe alguien con el nombre:  {request.IdentificationNumber}");
-
-            var employeesByNameAndId = employeesByName.Where(x => x.IdentificationNumber == request.IdentificationNumber);
-            if (employeesByNameAndId.Any())
-                throw new AlreadyExistException($"ya existe alguien con la combinacion de nombre: {request.PersonName} el nombre:  {request.IdentificationNumber}");
-
+            var employees = _repoEmployed.GetAll<EmployedEntity>();
+            ValidateIfExistTheSameIdentification(request, employees);
+            ValidateIfExistSameName(request, employees);
+            ValidateDontHaveDocumentTypeNit(request, employees);
+            ValidateCannotBeCorporatePerson(request, employees);
             throw new NotImplementedException();
+        }
+
+        public void ValidateDontHaveDocumentTypeNit(EmployedDto request, IEnumerable<EmployedEntity> people)
+        {
+            var validateByDocumentType = people.Where(x => x.DocumentType.DocumentType == request.DocumentType);
+
+            if (validateByDocumentType.Any())
+                throw new CannotBeCorporatePersonException($"Una persona no puede tener un tipo de documento: { request.DocumentType}");
+        }
+        public void ValidateCannotBeCorporatePerson(EmployedDto request, IEnumerable<EmployedEntity> people)
+        {
+            var validateCorporatePerson = people.Where(x => x.PersonType == request.PersonType);
+
+            if (!validateCorporatePerson.Any())
+                throw new CannotBeCorporatePersonException($"Una empleado no puede ser: { request.PersonType}");
+        }
+
+        public void ValidateIfExistTheSameIdentification(EmployedDto request, IEnumerable<EmployedEntity> people)
+        {
+            var validateByIdentificactionNumber = people.Where(x =>
+                        x.IdentificationNumber == request.IdentificationNumber && x.DocumentTypeId == request.DocumentTypeId);
+            if (validateByIdentificactionNumber.Any())
+                throw new AlreadyExistException($"ya existe alguien el mismo numero de indentificación y tipo de documento: {request.IdentificationNumber}");
+        }
+
+        public void ValidateIfExistSameName(EmployedDto request, IEnumerable<EmployedEntity> people)
+        {
+            var employeesByName = people.Where(e => e.PersonName == request.PersonName);
+            if (employeesByName.Any())
+                throw new AlreadyExistException($"ya existe alguien con el nombre:  {request.PersonName}");
         }
 
         public bool DeleteEmployed(EmployedRequestDto request)
@@ -61,7 +85,6 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
             if (request.DocumentTypeId == Guid.Empty) throw new DocumentTypeIdNotDefinedException();
             if (request.PersonDateOfBirth == default) throw new DateOfBirthNotDefinedException();
             if (request.CreationDate == default) throw new CreationDateNotDefinedException();
-
         }
     }
 }

@@ -517,30 +517,38 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             Assert.NotNull(response);
             Assert.NotEqual(default, response);
         }
-        //[Fact]
-        //[IntegrationTest]
-        //public async Task AddArea_Successfull_IntegrationTest()
-        //{
-        //    //Todo: Creat Empleado, y elimnarlo al final para que no deje basura en la base de datos, igualmente para la entidad de area
-        //    // tamnien llamar a los demas metodos como eliminar y actualizar
-        //    var service = new ServiceCollection();
-        //    service.ConfigurePeopleManagementService(new DbSettings
-        //    {
-        //        ConnectionString = "Data Source=DESKTOP-A52QQCF\\SQLEXPRESS;Initial Catalog=BusinessAdministration;Integrated Security=True"
-        //    });
-        //    var provider = service.BuildServiceProvider();
-        //    var employedSvc = provider.GetRequiredService<IEmployedService>();
+        [Fact]
+        [IntegrationTest]
+        public async Task AddArea_Successfull_IntegrationTest()
+        {
+            //Todo: Crear Empleado, y elinarlo al final para que no deje basura en la base de datos, igualmente para la entidad de area
+            // tamnien llamar a los demas metodos como eliminar y actualizar
+            var service = new ServiceCollection();
+            service.ConfigurePeopleManagementService(new DbSettings
+            {
+                ConnectionString = "Data Source=DESKTOP-A52QQCF\\SQLEXPRESS;Initial Catalog=BusinessAdministration;Integrated Security=True"
+            });
+            var provider = service.BuildServiceProvider();
+            var employedSvc = provider.GetRequiredService<IEmployedService>();
 
-        //    var newEmployed = new EmployedDto
-        //    {
-        //        AreaName = "Fake area",
-        //        LiableEmployerId = Guid.Parse("6b499387-b805-4339-8e8b-2d8bb08ba4eb")
-        //    };
-        //    var response = await employedSvc.AddArea(newEmployed).ConfigureAwait(false);
+            var newEmployed = new EmployedDto
+            {
+                EmployedId = Guid.NewGuid(),
+                AreaId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0599"),
+                PersonDateOfBirth = DateTimeOffset.Now,
+                CreationDate = DateTimeOffset.Now,
+                DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0597"),
+                IdentificationNumber = 123,
+                PersonName = "Juanita",
+                PersonType = PersonType.NaturalPerson,
+                EmployedCode = Guid.Parse("57c3aa7a-7e24-44db-89a8-711a75395160")
 
-        //    Assert.NotNull(response);
-        //    Assert.NotEqual(default, response);
-        //}
+            };
+            var response = await employedSvc.AddEmployed(newEmployed).ConfigureAwait(false);
+
+            Assert.NotNull(response);
+            Assert.NotEqual(default, response);
+        }
         private static ServiceProvider GetProviderWithoutMock()
         {
             var service = new ServiceCollection();

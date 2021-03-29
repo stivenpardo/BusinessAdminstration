@@ -7,8 +7,6 @@ using BusinessAdministration.Infrastructure.Data.Persistence.Core.Base.Configura
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Categories;
@@ -59,9 +57,9 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 DocumentType = "Fake area",
             };
 
-            var response = await documentTypeSvc.AddDocumentType(newDocumentType).ConfigureAwait(false);
-            Assert.NotNull(response);
-            Assert.NotEqual(default, response);
+            var responseAdd = await documentTypeSvc.AddDocumentType(newDocumentType).ConfigureAwait(false);
+            Assert.NotNull(responseAdd);
+            Assert.NotEqual(default, responseAdd);
         }
 
         [Fact]
@@ -81,10 +79,12 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 DocumentTypeId= Guid.NewGuid(),
                 DocumentType = "Pasaporte"
             };
-            var response = await documentTypeSvc.AddDocumentType(newDocumentType).ConfigureAwait(false);
+            var responseAdd = await documentTypeSvc.AddDocumentType(newDocumentType).ConfigureAwait(false);
+            var responseDelete =  documentTypeSvc.DeleteDocumentType(newDocumentType);
 
-            Assert.NotNull(response);
-            Assert.NotEqual(default, response);
+            Assert.NotNull(responseAdd);
+            Assert.NotEqual(default, responseAdd);
+            Assert.True(responseDelete);
         }
 
     }

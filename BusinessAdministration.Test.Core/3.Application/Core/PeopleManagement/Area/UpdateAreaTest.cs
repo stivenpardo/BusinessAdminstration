@@ -9,7 +9,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Categories;
 
@@ -85,6 +87,26 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             var response = areaSvc.UpdateArea(newArea);
             Assert.NotEqual(default, response);
             Assert.True(response);
+        }
+        [Fact]
+        [IntegrationTest]
+        public async Task UpdateArea_Successfull_IntegrationTest()
+        {
+            //TODO: Michael have to creato employed for create area. 
+            var service = new ServiceCollection();
+            service.ConfigurePeopleManagementService(new DbSettings
+            {
+                ConnectionString = "Data Source=DESKTOP-A52QQCF\\SQLEXPRESS;Initial Catalog=BusinessAdministration;Integrated Security=True"
+            });
+            var provider = service.BuildServiceProvider();
+            var areaSvc = provider.GetRequiredService<IAreaService>();
+
+            var responseSearch = await areaSvc.GetAll().ConfigureAwait(false);
+            var responseUpdate = areaSvc.UpdateArea(responseSearch.FirstOrDefault());
+
+            Assert.NotEqual(default, responseSearch);
+            Assert.NotNull(responseSearch);
+            Assert.True(responseUpdate);
         }
     }
 }

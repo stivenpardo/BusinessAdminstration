@@ -43,14 +43,18 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.S
         public bool UpdateDocumentType(DocumentTypeDto request)
         {
             ValidateRequireDocumentype(request);
-            ValidateDocumentTypeIdExist(request);
-            return _repoDocumentType.Update(_mapper.Map<DocumentTypeEntity>(request));
+            var documentTypeIdExist = _repoDocumentType
+                .SearchMatching<DocumentTypeEntity>(dt => dt.DocumentTypeId == request.DocumentTypeId);
+            if (!documentTypeIdExist.Any()) throw new DontExistIdException();
+            var entityUpdate = documentTypeIdExist.FirstOrDefault();
+            entityUpdate.DocumentType = request.DocumentType;
+            return _repoDocumentType.Update(entityUpdate);
         }
         private void ValidateDocumentTypeIdExist(DocumentTypeDto request)
         {
             var documentTypeIdExist = _repoDocumentType
-                            .SearchMatching<DocumentTypeEntity>(dt => dt.DocumentTypeId == request.DocumentTypeId).Any();
-            if (!documentTypeIdExist) throw new DontExistIdException();
+                            .SearchMatching<DocumentTypeEntity>(dt => dt.DocumentTypeId == request.DocumentTypeId);
+            if (!documentTypeIdExist.Any()) throw new DontExistIdException();
         }
         private static void ValidateRequireDocumentype(DocumentTypeDto request)
         {

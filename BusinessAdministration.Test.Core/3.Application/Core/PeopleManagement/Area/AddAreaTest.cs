@@ -155,30 +155,31 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             Assert.NotNull(response);
             Assert.NotEqual(default, response);
         }
-        //[Fact]
-        //[IntegrationTest]
-        //public async Task AddArea_Successfull_IntegrationTest()
-        //{
-        //    //Todo: Creat Empleado, y elimnarlo al final para que no deje basura en la base de datos, igualmente para la entidad de area
-        //    // tamnien llamar a los demas metodos como eliminar y actualizar
-        //    var service = new ServiceCollection();
-        //    service.ConfigurePeopleManagementService(new DbSettings
-        //    {
-        //        ConnectionString = "Data Source=DESKTOP-A52QQCF\\SQLEXPRESS;Initial Catalog=BusinessAdministration;Integrated Security=True"
-        //    });
-        //    var provider = service.BuildServiceProvider();
-        //    var areaSvc = provider.GetRequiredService<IAreaService>();
 
-        //    var newArea = new AreaRequestDto
-        //    {
-        //        AreaName = "Fake area",
-        //        LiableEmployerId = Guid.Parse("6b499387-b805-4339-8e8b-2d8bb08ba4eb")
-        //    };
-        //    var response = await areaSvc.AddArea(newArea).ConfigureAwait(false);
+        [Fact]
+        [IntegrationTest]
+        public async Task AddArea_Successfull_IntegrationTest()
+        {
+            //Todo: Creat Empleado, y elimnarlo al final para que no deje basura en la base de datos, igualmente para la entidad de area
+            // tamnien llamar a los demas metodos como eliminar y actualizar
+            var service = new ServiceCollection();
+            service.ConfigurePeopleManagementService(new DbSettings
+            {
+                ConnectionString = "Data Source=DESKTOP-A52QQCF\\SQLEXPRESS;Initial Catalog=BusinessAdministration;Integrated Security=True"
+            });
+            var provider = service.BuildServiceProvider();
+            var areaSvc = provider.GetRequiredService<IAreaService>();
 
-        //    Assert.NotNull(response);
-        //    Assert.NotEqual(default, response);
-        //}
+            var newArea = new AreaRequestDto
+            {
+                AreaName = "Fake area",
+                LiableEmployerId = Guid.Parse("6b499387-b805-4339-8e8b-2d8bb08ba4eb")
+            };
+            var response = await areaSvc.AddArea(newArea).ConfigureAwait(false);
+
+            Assert.NotNull(response);
+            Assert.NotEqual(default, response);
+        }
 
     }
 }

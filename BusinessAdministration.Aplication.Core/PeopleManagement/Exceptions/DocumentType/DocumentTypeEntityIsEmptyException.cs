@@ -2,7 +2,6 @@
 
 namespace BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.DocumentType
 {
-    public class DocumentTypeEntityIsEmptyException : SypException
-    {
-    }
+    public class DocumentTypeEntityIsEmptyException : SypException { }
+
 }

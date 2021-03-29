@@ -13,7 +13,7 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Categories;
-
+using System.Linq;
 namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.DocumentType
 {
     public class DeleteDocumentTypeTest
@@ -91,6 +91,27 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             var response = documentTypeSvc.DeleteDocumentType(newDocumentType);
             Assert.NotEqual(default, response);
             Assert.True(response);
+        }
+
+        [Fact]
+        [IntegrationTest]
+        public async Task DeleteDocumentType_Successfull_IntegrationTest()
+        {
+            var service = new ServiceCollection();
+            service.ConfigurePeopleManagementService(new DbSettings
+            {
+                ConnectionString = "Data Source=DESKTOP-A52QQCF\\SQLEXPRESS;Initial Catalog=BusinessAdministration;Integrated Security=True"
+            });
+            var provider = service.BuildServiceProvider();
+            var documentTypeSvc = provider.GetRequiredService<IDocumentTypeService>();
+
+            var responseSearch = await documentTypeSvc.GetAll().ConfigureAwait(false);
+            var responseDelete = documentTypeSvc.DeleteDocumentType(responseSearch.FirstOrDefault());
+            var responseAdd = await documentTypeSvc.AddDocumentType(responseSearch.FirstOrDefault()).ConfigureAwait(false);
+
+            Assert.True(responseDelete);
+            Assert.NotNull(responseAdd);
+            Assert.NotEqual(default, responseAdd);
         }
 
     }

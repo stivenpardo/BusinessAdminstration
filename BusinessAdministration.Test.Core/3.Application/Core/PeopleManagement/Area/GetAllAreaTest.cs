@@ -1,6 +1,7 @@
 ﻿using BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Configuration;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Area;
+using BusinessAdministration.Aplication.Dto.PeopleManagement.Area;
 using BusinessAdministration.Domain.Core.PeopleManagement.Area;
 using BusinessAdministration.Infrastructure.Data.Persistence.Core.Base.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 using Xunit.Categories;
+using System.Linq;
 
 namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.Area
 {
@@ -62,6 +64,38 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             var response = await areaSvc.GetAll().ConfigureAwait(false);
             Assert.NotNull(response);
             Assert.NotEqual(default, response);
+        }
+        [Fact]
+        [IntegrationTest]
+        public async Task GetAllArea_Successfull_IntegrationTest()
+        {
+            var service = new ServiceCollection();
+            service.ConfigurePeopleManagementService(new DbSettings
+            {
+                ConnectionString = "Data Source=DESKTOP-A52QQCF\\SQLEXPRESS;Initial Catalog=BusinessAdministration;Integrated Security=True"
+            });
+            var provider = service.BuildServiceProvider();
+            var areaSvc = provider.GetRequiredService<IAreaService>();
+
+            var newArea = new AreaRequestDto
+            {
+                AreaName = "Fake area"
+            };
+            var responseAdd = await areaSvc.AddArea(newArea).ConfigureAwait(false);    
+            var responseSearch = await areaSvc.GetAll().ConfigureAwait(false);
+            var area = responseSearch.FirstOrDefault();
+            var newAreaDelete = new AreaDto
+            {
+                AreaId = Guid.Parse(responseAdd.ToString()),
+                AreaName = "Fake area"
+            };
+            var responseDelete = areaSvc.DeleteArea(newAreaDelete);
+
+            Assert.NotNull(responseAdd);
+            Assert.NotNull(responseSearch);
+            Assert.NotEqual(default, responseAdd);
+            Assert.NotEqual(default, responseSearch);
+            Assert.True(responseDelete);
         }
 
     }

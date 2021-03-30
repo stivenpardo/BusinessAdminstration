@@ -1,8 +1,7 @@
-﻿using BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services;
-using BusinessAdministration.Aplication.Core.PeopleManagement.Configuration;
-using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Area;
-using BusinessAdministration.Aplication.Dto.PeopleManagement.Area;
-using BusinessAdministration.Domain.Core.PeopleManagement.Area;
+﻿using BusinessAdministration.Aplication.Core.PeopleManagement.Configuration;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Services;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Person;
+using BusinessAdministration.Aplication.Dto.PeopleManagement.Employed;
 using BusinessAdministration.Domain.Core.PeopleManagement.Employed;
 using BusinessAdministration.Infrastructure.Data.Persistence.Core.Base.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,80 +18,71 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
     {
         [Fact]
         [UnitTest]
-        public void DeleteArea_Throw_Exception_when_AreaId_is_null_or_empty()
+        public void DeleteEmployed_Throw_IdCannotNullOrEmptyException_when_AreaId_is_null_or_empty()
         {
             var service = new ServiceCollection();
             service.ConfigurePeopleManagementService(new DbSettings());
             var provider = service.BuildServiceProvider();
-            var areaSvc = provider.GetRequiredService<IAreaService>();
+            var employedSvc = provider.GetRequiredService<IEmployedService>();
 
-            Assert.Throws<AreaIdNotDefinedException>(() => areaSvc.DeleteArea(new AreaDto
+            Assert.Throws<IdCannotNullOrEmptyException>(() => employedSvc.DeleteEmployed(new EmployedRequestDto
             {
-                AreaId = Guid.Empty,
-                AreaName = "fake name",
-                LiableEmployerId = Guid.NewGuid()
+                EmployedId = Guid.Empty
             }));
         }
         [Fact]
         [UnitTest]
-        public void Throw_Exception_When_AreaId_is_associate_to_employed()
+        public void Throw_DontExistIdException_when_id_it_isnt()
         {
             var employedRepoMock = new Mock<IEmployedRepository>();
             employedRepoMock
-                .Setup(e => e.SearchMatching(It.IsAny<Expression<Func<EmployedEntity, bool>>>()))
-                .Returns(new List<EmployedEntity> { new EmployedEntity {
-                    EmployedId = Guid.NewGuid(),
-                    PersonName = "fakeName",
-                    AreaId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4fe")
-                } });
+                 .Setup(x => x.SearchMatching(It.IsAny<Expression<Func<EmployedEntity, bool>>>()))
+                 .Returns(new List<EmployedEntity>());
             var service = new ServiceCollection();
             service.AddTransient(_ => employedRepoMock.Object);
             service.ConfigurePeopleManagementService(new DbSettings());
             var provider = service.BuildServiceProvider();
-            var areaSvc = provider.GetRequiredService<IAreaService>();
+            var employedSvc = provider.GetRequiredService<IEmployedService>();
 
-            var newArea = new AreaDto
+            var newEmployed = new EmployedRequestDto
             {
-                AreaId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4fe"),
-                AreaName = "Fake area",
-                LiableEmployerId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4de")
+                EmployedId = Guid.NewGuid(),
             };
-            var response = Assert.Throws<AreaIdIsAssociatedToEmployedException>(() =>
-               areaSvc.DeleteArea(newArea));
-            Assert.Equal(newArea.AreaId.ToString(), response.Message);
+            Assert.Throws<DontExistIdException>(() => employedSvc.DeleteEmployed(newEmployed));
         }
         [Fact]
         [UnitTest]
-        public void DeleteArea_Successfult_Test()
+        public void DeleteEmployed_Successfult_Test()
         {
             var employedRepoMock = new Mock<IEmployedRepository>();
             employedRepoMock
                 .Setup(e => e.SearchMatching(It.IsAny<Expression<Func<EmployedEntity, bool>>>()))
-                .Returns(new List<EmployedEntity>());
+                .Returns(new List<EmployedEntity> { new EmployedEntity
+                {
+                    EmployedId = Guid.NewGuid()
+                }});
 
-            var areaRepoMock = new Mock<IAreaRepository>();
-            areaRepoMock
-                 .Setup(x => x.Delete(It.IsAny<AreaEntity>()))
-                 .Returns(() =>
-                 {
-                     return true;
-                 });
+            employedRepoMock
+                .Setup(e => e.Delete(It.IsAny<EmployedEntity>()))
+                .Returns( ()=> 
+                {
+                    return true;
+                });
+
             var service = new ServiceCollection();
             service.AddTransient(_ => employedRepoMock.Object);
-            service.AddTransient(_ => areaRepoMock.Object);
             service.ConfigurePeopleManagementService(new DbSettings());
             var provider = service.BuildServiceProvider();
-            var areaSvc = provider.GetRequiredService<IAreaService>();
+            var employedSvc = provider.GetRequiredService<IEmployedService>();
 
-            var newArea = new AreaDto
+            var newEmployed = new EmployedRequestDto
             {
-                AreaId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4fe")
+                EmployedId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4fe")
             };
 
-            var response = areaSvc.DeleteArea(newArea);
-            Assert.NotEqual(default, response);
-            Assert.True(response);
+            var responseDelete = employedSvc.DeleteEmployed(newEmployed);
+            Assert.NotEqual(default, responseDelete);
+            Assert.True(responseDelete);
         }
-
     }
 }

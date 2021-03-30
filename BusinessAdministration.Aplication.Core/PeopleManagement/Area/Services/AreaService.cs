@@ -68,8 +68,12 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services
         public bool UpdateArea(AreaDto request)
         {
             ValidateAreIdRequired(request);
-            ValidationAreIdExist(request);
-            return _repoArea.Update(_mapper.Map<AreaEntity>(request));
+            var areaIdExist = _repoArea.SearchMatching<AreaEntity>(a => a.AreaId == request.AreaId);
+            if (!areaIdExist.Any()) throw new DontExistIdException();
+            var entityUpdate = areaIdExist.FirstOrDefault();
+            entityUpdate.AreaName = request.AreaName;
+            entityUpdate.LiableEmployerId = request.LiableEmployerId;
+            return _repoArea.Update(entityUpdate);
         }
         private static void ValidateRequireFields(AreaRequestDto request)
         {

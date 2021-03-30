@@ -11,6 +11,7 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using Xunit;
 using Xunit.Categories;
 
@@ -129,6 +130,32 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             Assert.NotEqual(default, response);
             Assert.True(response);
         }
+        [Fact]
+        [IntegrationTest]
+        public async Task DeleteArea_Successfull_IntegrationTest()
+        {
+            var service = new ServiceCollection();
+            service.ConfigurePeopleManagementService(new DbSettings
+            {
+                ConnectionString = "Data Source=DESKTOP-A52QQCF\\SQLEXPRESS;Initial Catalog=BusinessAdministration;Integrated Security=True"
+            });
+            var provider = service.BuildServiceProvider();
+            var areaSvc = provider.GetRequiredService<IAreaService>();
 
+            var newArea = new AreaRequestDto
+            {
+                AreaName = "Fake area"
+            };
+            var responseAdd = await areaSvc.AddArea(newArea).ConfigureAwait(false);
+            var newAreaDelete = new AreaDto
+            {
+                AreaId = Guid.Parse(responseAdd.ToString()),
+            };
+            var responseDelete = areaSvc.DeleteArea(newAreaDelete);
+
+            Assert.NotNull(responseAdd);
+            Assert.NotEqual(default, responseAdd);
+            Assert.True(responseDelete);
+        }
     }
 }

@@ -102,8 +102,13 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             var areaSvc = provider.GetRequiredService<IAreaService>();
 
             var responseSearch = await areaSvc.GetAll().ConfigureAwait(false);
-            var responseUpdate = areaSvc.UpdateArea(responseSearch.FirstOrDefault());
-
+            var area = responseSearch.FirstOrDefault();
+            var newArea = new AreaDto
+            {
+                AreaId = area.AreaId,
+                AreaName = "updateArea"
+            };
+            var responseUpdate = areaSvc.UpdateArea(newArea);
             Assert.NotEqual(default, responseSearch);
             Assert.NotNull(responseSearch);
             Assert.True(responseUpdate);

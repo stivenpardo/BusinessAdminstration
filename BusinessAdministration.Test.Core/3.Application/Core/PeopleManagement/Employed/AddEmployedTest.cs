@@ -1,9 +1,13 @@
-﻿using BusinessAdministration.Aplication.Core.PeopleManagement.Configuration;
+﻿using BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Configuration;
+using BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Area;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.DocumentType;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Employed;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Person;
+using BusinessAdministration.Aplication.Dto.PeopleManagement.Area;
+using BusinessAdministration.Aplication.Dto.PeopleManagement.DocumentType;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.Employed;
 using BusinessAdministration.Domain.Core.PeopleManagement;
 using BusinessAdministration.Domain.Core.PeopleManagement.Area;
@@ -517,12 +521,11 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             Assert.NotNull(response);
             Assert.NotEqual(default, response);
         }
+
         [Fact]
         [IntegrationTest]
-        public async Task AddArea_Successfull_IntegrationTest()
+        public async Task Add_and_delte_Employed_Successfull_IntegrationTest()
         {
-            //Todo: Crear Empleado, y elinarlo al final para que no deje basura en la base de datos, igualmente para la entidad de area
-            // tamnien llamar a los demas metodos como eliminar y actualizar
             var service = new ServiceCollection();
             service.ConfigurePeopleManagementService(new DbSettings
             {
@@ -530,24 +533,57 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             });
             var provider = service.BuildServiceProvider();
             var employedSvc = provider.GetRequiredService<IEmployedService>();
+            var documentTypeSvc = provider.GetRequiredService<IDocumentTypeService>();
+            var areaSvc = provider.GetRequiredService<IAreaService>();
 
+            var newDocumentType = new DocumentTypeDto
+            {
+                DocumentTypeId = Guid.NewGuid(),
+                DocumentType = "PasaportefaKeeee"
+            };
+            var responseAddDocumentType = await documentTypeSvc.AddDocumentType(newDocumentType).ConfigureAwait(false);
+            var newArea = new AreaRequestDto
+            {
+                AreaName = "Fake area"
+            };
+            var responseAddArea = await areaSvc.AddArea(newArea).ConfigureAwait(false);
             var newEmployed = new EmployedDto
             {
                 EmployedId = Guid.NewGuid(),
-                AreaId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0599"),
-                PersonDateOfBirth = DateTimeOffset.Now,
-                CreationDate = DateTimeOffset.Now,
-                DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0597"),
+                EmployedCode = Guid.NewGuid(),
+                PersonType = PersonType.NaturalPerson,
+                EmployedPosition = EmployedPosition.Developer,
+                AreaId = Guid.Parse(responseAddArea.ToString()),
+                DocumentTypeId = Guid.Parse(responseAddDocumentType.ToString()),
                 IdentificationNumber = 123,
                 PersonName = "Juanita",
-                PersonType = PersonType.NaturalPerson,
-                EmployedCode = Guid.Parse("57c3aa7a-7e24-44db-89a8-711a75395160")
-
+                PersonLastName = "lastName fake",
+                PersonDateOfBirth = DateTimeOffset.Now,
+                CreationDate = DateTimeOffset.Now,
+                PersonPhoneNumber= 3212224534,
+                PersonEmail = "Fake@gmail.com"
             };
-            var response = await employedSvc.AddEmployed(newEmployed).ConfigureAwait(false);
+            var responseAddEmployed = await employedSvc.AddEmployed(newEmployed).ConfigureAwait(false);
+            var employedDelete = new EmployedRequestDto 
+            {
+                EmployedId = Guid.Parse(responseAddEmployed.ToString())
+            };
+            var responseDeleteEmployed = employedSvc.DeleteEmployed(employedDelete);
+            var responseDeleteDocumentType = documentTypeSvc.DeleteDocumentType(newDocumentType);
+            var areaDelete = new AreaDto
+            {
+                AreaId = Guid.Parse(responseAddArea.ToString())
+            };
+            var responseDeleArea = areaSvc.DeleteArea(areaDelete);
 
-            Assert.NotNull(response);
-            Assert.NotEqual(default, response);
+            Assert.NotNull(responseAddDocumentType);
+            Assert.NotNull(responseAddArea);
+            Assert.NotEqual(default, responseAddDocumentType);
+            Assert.NotEqual(default, responseAddArea);
+            Assert.NotEqual(default, responseAddEmployed);
+            Assert.True(responseDeleteDocumentType);
+            Assert.True(responseDeleArea);
+            Assert.True(responseDeleteEmployed);
         }
         private static ServiceProvider GetProviderWithoutMock()
         {

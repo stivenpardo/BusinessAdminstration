@@ -4,6 +4,7 @@ using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Documen
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Employed;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Person;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.Employed;
+using BusinessAdministration.Domain.Core.PeopleManagement;
 using BusinessAdministration.Domain.Core.PeopleManagement.Area;
 using BusinessAdministration.Domain.Core.PeopleManagement.DocumentType;
 using BusinessAdministration.Domain.Core.PeopleManagement.Employed;
@@ -75,9 +76,8 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
         #region validations for employed
         public void ValidateCannotBeCorporatePerson(EmployedDto request, IEnumerable<EmployedEntity> people)
         {
-            var validateCorporatePerson = people.Where(x => x.PersonType == request.PersonType);
-
-            if (!validateCorporatePerson.Any())
+            var validateCorporatePerson = request.PersonType == PersonType.CorporatePerson;
+            if (validateCorporatePerson)
                 throw new CannotBeCorporatePersonException($"Una empleado no puede ser: { request.PersonType}");
         }
         public void ValidateHaveUniqueCode(EmployedDto request, IEnumerable<EmployedEntity> people)
@@ -98,7 +98,9 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
         #endregion 
         public bool DeleteEmployed(EmployedRequestDto request)
         {
-            throw new NotImplementedException();
+            if (request.EmployedId == default) throw new IdCannotNullOrEmptyException();
+            ValidateEmployedIdExist(request);
+            return _repoEmployed.Delete(_mapper.Map<EmployedEntity>(request));
         }
 
         public async Task<IEnumerable<EmployedDto>> GetAll()
@@ -109,6 +111,12 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
         public bool UpdateEmployed(EmployedDto request)
         {
             throw new NotImplementedException();
+        }
+        private void ValidateEmployedIdExist(EmployedRequestDto request)
+        {
+            var employedIdExist = _repoEmployed
+                .SearchMatching<EmployedEntity>(dt => dt.EmployedId == request.EmployedId).Any();
+            if (!employedIdExist) throw new DontExistIdException();
         }
         private static void ValidateRequireFields(EmployedDto request)
         {

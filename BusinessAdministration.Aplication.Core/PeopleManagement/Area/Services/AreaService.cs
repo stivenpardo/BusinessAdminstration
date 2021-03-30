@@ -26,19 +26,21 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services
         public async Task<Guid?> AddArea(AreaRequestDto request)
         {
             ValidateRequireFields(request);
-
+            if (string.IsNullOrEmpty(request.LiableEmployerId.ToString()))
+            {
+                var responseArea = await _repoArea.Insert(_mapper.Map<AreaEntity>(request)).ConfigureAwait(false);
+                return responseArea.AreaId;
+            }
             var employedIdExist = _repoEmployed
-                .SearchMatching<EmployedEntity>(employed => employed.EmployedId == request.LiableEmployerId)
-                .Any();
+                .SearchMatching<EmployedEntity>(employed => employed.EmployedId == request.LiableEmployerId).Any();
             if (!employedIdExist)
-                throw new AreaEmployeIdDontExistException(request.LiableEmployerId.ToString());
+                throw new AreaEmployeIdDontExistException($"El empleado con el id: {request.LiableEmployerId} no existe");
 
             var employedLiableExist = _repoArea
                 .SearchMatching<AreaEntity>(area => area.LiableEmployerId == request.LiableEmployerId)
                 .Any();
-
             if (employedLiableExist)
-                throw new AreaLiableAlreadyExistException(request.LiableEmployerId.ToString());
+                throw new AreaLiableAlreadyExistException($"El empleado con el id: {request.LiableEmployerId} ya esta asignado a una area");
 
             var response = await _repoArea.Insert(_mapper.Map<AreaEntity>(request)).ConfigureAwait(false);
             return response.AreaId;

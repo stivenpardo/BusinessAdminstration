@@ -38,18 +38,36 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 AreaName = null,
                 LiableEmployerId = Guid.NewGuid()
             })).ConfigureAwait(false);
-
-            await Assert.ThrowsAsync<AreaLiableEmployeedIdNotDefinedException>(() => areaSvc.AddArea(new AreaRequestDto
+        }
+        [Fact]
+        [UnitTest]
+        public async Task AddArea_Successfult_When_LiableEmployed_is_null_Test()
+        {
+            var areaRepoMock = new Mock<IAreaRepository>();
+            areaRepoMock
+                 .Setup(x => x.Insert(It.IsAny<AreaEntity>()))
+                 .Returns(() =>
+                 {
+                     return Task.FromResult(new AreaEntity
+                     {
+                         AreaId = Guid.NewGuid(),
+                         AreaName = "Fake area",
+                         LiableEmployerId = Guid.NewGuid()
+                     });
+                 });
+            var service = new ServiceCollection();
+            service.AddTransient(_ => areaRepoMock.Object);
+            service.ConfigurePeopleManagementService(new DbSettings());
+            var provider = service.BuildServiceProvider();
+            var areaSvc = provider.GetRequiredService<IAreaService>();
+            var newArea = new AreaRequestDto
             {
                 AreaName = "Fake area",
-                LiableEmployerId = Guid.Empty
-            })).ConfigureAwait(false);
-
-            await Assert.ThrowsAsync<AreaLiableEmployeedIdNotDefinedException>(() => areaSvc.AddArea(new AreaRequestDto
-            {
-                AreaName = "Fake area",
-                LiableEmployerId = default
-            })).ConfigureAwait(false);
+                LiableEmployerId = default,
+            };
+            var responseAdd = await areaSvc.AddArea(newArea).ConfigureAwait(false);
+            Assert.NotNull(responseAdd);
+            Assert.NotEqual(default, responseAdd);
         }
         [Fact]
         [UnitTest]
@@ -70,13 +88,13 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 AreaName = "Fake area",
                 LiableEmployerId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4fe")
             };
-            var response = await Assert.ThrowsAsync<AreaEmployeIdDontExistException>(() =>
+            var responseAdd = await Assert.ThrowsAsync<AreaEmployeIdDontExistException>(() =>
                areaSvc.AddArea(newArea)).ConfigureAwait(false);
-            Assert.Equal(newArea.LiableEmployerId.ToString(), response.Message);
+            Assert.Equal($"El empleado con el id: {newArea.LiableEmployerId} no existe", responseAdd.Message);
         }
         [Fact]
         [UnitTest]
-        public async Task Throws_Expection_when_EmployedId_already_exist_in_AreaEntity()
+        public async Task Throw_Expection_when_EmployedId_already_exist_in_AreaEntity()
         {
             var employedRepoMock = new Mock<IEmployedRepository>();
             employedRepoMock
@@ -107,9 +125,9 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 AreaName = "Fake area",
                 LiableEmployerId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4fe")
             };
-            var response = await Assert.ThrowsAsync<AreaLiableAlreadyExistException>(() =>
+            var responseAdd = await Assert.ThrowsAsync<AreaLiableAlreadyExistException>(() =>
                 areaSvc.AddArea(newArea)).ConfigureAwait(false);
-            Assert.Equal(newArea.LiableEmployerId.ToString(), response.Message);
+            Assert.Equal($"El empleado con el id: {newArea.LiableEmployerId} ya esta asignado a una area", responseAdd.Message);
         }
 
         [Fact]
@@ -151,17 +169,15 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 LiableEmployerId = Guid.NewGuid()
             };
 
-            var response = await areaSvc.AddArea(newArea).ConfigureAwait(false);
-            Assert.NotNull(response);
-            Assert.NotEqual(default, response);
+            var responseAdd = await areaSvc.AddArea(newArea).ConfigureAwait(false);
+            Assert.NotNull(responseAdd);
+            Assert.NotEqual(default, responseAdd);
         }
 
         [Fact]
         [IntegrationTest]
         public async Task AddArea_Successfull_IntegrationTest()
         {
-            //Todo: Creat Empleado, y elimnarlo al final para que no deje basura en la base de datos, igualmente para la entidad de area
-            // tamnien llamar a los demas metodos como eliminar y actualizar
             var service = new ServiceCollection();
             service.ConfigurePeopleManagementService(new DbSettings
             {
@@ -172,13 +188,19 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
 
             var newArea = new AreaRequestDto
             {
-                AreaName = "Fake area",
-                LiableEmployerId = Guid.Parse("6b499387-b805-4339-8e8b-2d8bb08ba4eb")
+                AreaName = "Fake area"
             };
-            var response = await areaSvc.AddArea(newArea).ConfigureAwait(false);
+            var responseAdd = await areaSvc.AddArea(newArea).ConfigureAwait(false);
+            var newAreaDelete = new AreaDto
+            {
+                AreaId = Guid.Parse(responseAdd.ToString()),
+                AreaName = "Fake area"
+            };
+            var responseDelete = areaSvc.DeleteArea(newAreaDelete);
 
-            Assert.NotNull(response);
-            Assert.NotEqual(default, response);
+            Assert.NotNull(responseAdd);
+            Assert.NotEqual(default, responseAdd);
+            Assert.True(responseDelete);
         }
 
     }

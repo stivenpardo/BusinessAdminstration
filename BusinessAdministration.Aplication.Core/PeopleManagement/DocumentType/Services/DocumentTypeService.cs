@@ -35,7 +35,7 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.S
         }
         public async Task<IEnumerable<DocumentTypeDto>> GetAll()
         {
-            var response = _mapper.Map<IEnumerable<DocumentTypeDto>>(_repoDocumentType.GetAll<DocumentTypeEntity>());
+            var response = await Task.FromResult(_mapper.Map<IEnumerable<DocumentTypeDto>>(_repoDocumentType.GetAll<DocumentTypeEntity>()));
             if (response.Count() == 0) throw new DocumentTypeEntityIsEmptyException();
             return response;
         }

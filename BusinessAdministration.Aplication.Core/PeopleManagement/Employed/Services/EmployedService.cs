@@ -105,12 +105,32 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Servi
 
         public async Task<IEnumerable<EmployedDto>> GetAll()
         {
-            throw new NotImplementedException();
+            var response = await Task.FromResult(_mapper.Map<IEnumerable<EmployedDto>>(_repoEmployed.GetAll<EmployedEntity>()))
+                .ConfigureAwait(false);
+            return response;
         }
 
         public bool UpdateEmployed(EmployedDto request)
         {
-            throw new NotImplementedException();
+            if (request.EmployedId == default) throw new IdCannotNullOrEmptyException();
+            var employedIdExist = _repoEmployed
+                .SearchMatching<EmployedEntity>(e => e.EmployedId == request.EmployedId);
+            if (!employedIdExist.Any()) throw new DontExistIdException();
+            var entityUpdate = employedIdExist.FirstOrDefault();
+            
+            entityUpdate.EmployedCode = request.EmployedCode;
+            entityUpdate.PersonType = request.PersonType;
+            entityUpdate.EmployedPosition = request.EmployedPosition;
+            entityUpdate.AreaId = request.AreaId;
+            entityUpdate.DocumentTypeId = request.DocumentTypeId;
+            entityUpdate.IdentificationNumber = request.IdentificationNumber;
+            entityUpdate.PersonName = request.PersonName;
+            entityUpdate.PersonLastName = request.PersonLastName;
+            entityUpdate.PersonDateOfBirth = request.PersonDateOfBirth;
+            entityUpdate.CreationDate = request.CreationDate;
+            entityUpdate.PersonPhoneNumber = request.PersonPhoneNumber;
+            entityUpdate.PersonEmail = request.PersonEmail;
+            return _repoEmployed.Update(entityUpdate);
         }
         private void ValidateEmployedIdExist(EmployedRequestDto request)
         {

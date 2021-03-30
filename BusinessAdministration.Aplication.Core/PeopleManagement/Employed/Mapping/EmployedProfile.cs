@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using BusinessAdministration.Aplication.Dto.PeopleManagement.Area;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.Employed;
 using BusinessAdministration.Domain.Core.PeopleManagement.Employed;
 

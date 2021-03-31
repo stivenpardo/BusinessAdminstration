@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using BusinessAdministration.Aplication.Core.ExportAndImportJSON;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.DocumentType;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Person;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.Employed;
@@ -15,12 +16,14 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Customer.Servi
     {
         private readonly ICustomerRepository _repoCustomer;
         private readonly IDocumentTypeRepository _repoDocumentType;
+        private readonly IExportAndImportJson _imporExportjson;
         private readonly IMapper _mapper;
 
-        public CustomerService(ICustomerRepository repoCustomer, IMapper mapper, IDocumentTypeRepository repoDocumentType)
+        public CustomerService(ICustomerRepository repoCustomer, IMapper mapper, IDocumentTypeRepository repoDocumentType, IExportAndImportJson imporExportjson)
         {
             _repoCustomer = repoCustomer;
             _repoDocumentType = repoDocumentType;
+            _imporExportjson = imporExportjson;
             _mapper = mapper;
         }
         public async Task<Guid> AddCustomer(CustomerDto request)
@@ -92,6 +95,20 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Customer.Servi
             entityUpdate.PersonPhoneNumber = request.PersonPhoneNumber;
             entityUpdate.PersonEmail = request.PersonEmail;
             return _repoCustomer.Update(entityUpdate);
+        }
+        public async Task<string> ExportAll()
+        {
+            var listEntity = _repoCustomer.GetAll<CustomerEntity>();
+            return await _imporExportjson.ExportJson("ExportAllProveedor", _mapper.Map<IEnumerable<CustomerDto>>(listEntity)).ConfigureAwait(false);
+        }
+        public async Task<IEnumerable<CustomerDto>> ImportAll()
+        {
+            var customerDto = await _imporExportjson.ImportJson<IEnumerable<CustomerDto>>("ExportAllProveedor").ConfigureAwait(false);
+            foreach (CustomerDto element in customerDto)
+            {
+                UpdateCustomer(element);
+            }
+            return customerDto;
         }
         private void ValidateCustomerIdExist(CustomerDto request)
         {

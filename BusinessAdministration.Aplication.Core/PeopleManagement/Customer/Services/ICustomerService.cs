@@ -11,5 +11,7 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Customer.Servi
         public Task<IEnumerable<CustomerDto>> GetAll();
         public bool UpdateCustomer(CustomerDto request);
         public bool DeleteCustomer(CustomerDto request);
+        public Task<string> ExportAll();
+        public Task<IEnumerable<CustomerDto>> ImportAll();
     }
 }

@@ -41,5 +41,9 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Customer
                 StatusDescription = response ? "Inserted customer" : "Not inserted customer",
             };
         }
+        public async Task<string> CustomerExportAll() =>
+            await _customerSvc.ExportAll().ConfigureAwait(false);
+        public async Task<IEnumerable<CustomerDto>> CustomerImportAll() => 
+            await _customerSvc.ImportAll().ConfigureAwait(false);
     }
 }

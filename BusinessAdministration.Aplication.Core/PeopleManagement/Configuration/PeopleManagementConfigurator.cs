@@ -1,4 +1,5 @@
-﻿using BusinessAdministration.Aplication.Core.Mapper.Configuration;
+﻿using BusinessAdministration.Aplication.Core.ExportAndImportJSON.Configuration;
+using BusinessAdministration.Aplication.Core.Mapper.Configuration;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Customer;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Customer.Services;
@@ -31,6 +32,7 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Configuration
             services.TryAddTransient<IProviderFacade, ProviderFacade>();
 
             services.ConfigureMapper();
+            services.ConfigureExportAndImportJson();
             services.ConfigureBaseRepository(settings);
         }
     }

@@ -10,5 +10,8 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Customer
         public Task<IEnumerable<CustomerDto>> GetAllCustomers();
         public CustomerResponseDto UpdateCustomer(CustomerDto request);
         public CustomerResponseDto DeleteCustomer(CustomerDto request);
+        public Task<string> CustomerExportAll();
+        public Task<IEnumerable<CustomerDto>> CustomerImportAll();
+
     }
 }

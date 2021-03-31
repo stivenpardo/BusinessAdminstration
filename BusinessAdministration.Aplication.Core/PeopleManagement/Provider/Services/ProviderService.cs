@@ -58,7 +58,7 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Provider.Servi
             var documentIsNit = documentIdExist.Where(x => x.DocumentType.ToLower() != "nit");
 
             if (documentIsNit.Any())
-                throw new CannotBeCorporatePersonException("Una persona no puede tener un tipo de documento diferente a Nit");
+                throw new CannotBeNaturalPersonException("Una persona no puede tener un tipo de documento diferente a Nit");
         }
         #endregion validations generals for people
         public bool DeleteProvider(ProviderDto request)

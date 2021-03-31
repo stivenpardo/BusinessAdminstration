@@ -1,8 +1,8 @@
 ﻿using BusinessAdministration.Aplication.Core.PeopleManagement.Configuration;
-using BusinessAdministration.Aplication.Core.PeopleManagement.Customer.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Person;
-using BusinessAdministration.Aplication.Dto.PeopleManagement.Employed;
-using BusinessAdministration.Domain.Core.PeopleManagement.Customer;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Provider.Services;
+using BusinessAdministration.Aplication.Dto.PeopleManagement.Provider;
+using BusinessAdministration.Domain.Core.PeopleManagement.Provider;
 using BusinessAdministration.Infrastructure.Data.Persistence.Core.Base.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -18,69 +18,69 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
     {
         [Fact]
         [UnitTest]
-        public void DeleteCustomer_Throw_IdCannotNullOrEmptyException_when_CustomerId_is_null_or_empty()
+        public void DeleteProvider_Throw_IdCannotNullOrEmptyException_when_ProviderId_is_null_or_empty()
         {
             var service = new ServiceCollection();
             service.ConfigurePeopleManagementService(new DbSettings());
             var provider = service.BuildServiceProvider();
-            var customerSvc = provider.GetRequiredService<ICustomerService>();
+            var providerSvc = provider.GetRequiredService<IProviderService>();
 
-            Assert.Throws<IdCannotNullOrEmptyException>(() => customerSvc.DeleteCustomer(new CustomerDto
+            Assert.Throws<IdCannotNullOrEmptyException>(() => providerSvc.DeleteProvider(new ProviderDto
             {
-                CustomerId = Guid.Empty
+                ProviderId = Guid.Empty
             }));
         }
         [Fact]
         [UnitTest]
         public void Throw_DontExistIdException_when_id_it_isnt()
         {
-            var customerRepoMock = new Mock<ICustomerRepository>();
-            customerRepoMock
-                 .Setup(x => x.SearchMatching(It.IsAny<Expression<Func<CustomerEntity, bool>>>()))
-                 .Returns(new List<CustomerEntity>());
+            var providerRepoMock = new Mock<IProviderRepository>();
+            providerRepoMock
+                 .Setup(x => x.SearchMatching(It.IsAny<Expression<Func<ProviderEntity, bool>>>()))
+                 .Returns(new List<ProviderEntity>());
             var service = new ServiceCollection();
-            service.AddTransient(_ => customerRepoMock.Object);
+            service.AddTransient(_ => providerRepoMock.Object);
             service.ConfigurePeopleManagementService(new DbSettings());
             var provider = service.BuildServiceProvider();
-            var customerSvc = provider.GetRequiredService<ICustomerService>();
+            var providerSvc = provider.GetRequiredService<IProviderService>();
 
-            var newCustomer = new CustomerDto
+            var newProvider = new ProviderDto
             {
-                CustomerId = Guid.NewGuid(),
+                ProviderId = Guid.NewGuid(),
             };
-            Assert.Throws<DontExistIdException>(() => customerSvc.DeleteCustomer(newCustomer));
+            Assert.Throws<DontExistIdException>(() => providerSvc.DeleteProvider(newProvider));
         }
         [Fact]
         [UnitTest]
-        public void DeleteCustomer_Successfult_Test()
+        public void DeleteProvider_Successfult_Test()
         {
-            var customerRepoMock = new Mock<ICustomerRepository>();
-            customerRepoMock
-                .Setup(e => e.SearchMatching(It.IsAny<Expression<Func<CustomerEntity, bool>>>()))
-                .Returns(new List<CustomerEntity> { new CustomerEntity
+            var providerRepoMock = new Mock<IProviderRepository>();
+            providerRepoMock
+                .Setup(e => e.SearchMatching(It.IsAny<Expression<Func<ProviderEntity, bool>>>()))
+                .Returns(new List<ProviderEntity> { new ProviderEntity
                 {
-                    CustomerId = Guid.NewGuid()
+                    ProviderId = Guid.NewGuid()
                 }});
 
-            customerRepoMock
-                .Setup(e => e.Delete(It.IsAny<CustomerEntity>()))
+            providerRepoMock
+                .Setup(e => e.Delete(It.IsAny<ProviderEntity>()))
                 .Returns(() =>
                {
                    return true;
                });
 
             var service = new ServiceCollection();
-            service.AddTransient(_ => customerRepoMock.Object);
+            service.AddTransient(_ => providerRepoMock.Object);
             service.ConfigurePeopleManagementService(new DbSettings());
             var provider = service.BuildServiceProvider();
-            var customerSvc = provider.GetRequiredService<ICustomerService>();
+            var providerSvc = provider.GetRequiredService<IProviderService>();
 
-            var newCustomer = new CustomerDto
+            var newProvider = new ProviderDto
             {
-                CustomerId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4fe")
+                ProviderId = Guid.Parse("31826538-6b06-4021-95c2-27fb184ac4fe")
             };
 
-            var responseDelete = customerSvc.DeleteCustomer(newCustomer);
+            var responseDelete = providerSvc.DeleteProvider(newProvider);
             Assert.NotEqual(default, responseDelete);
             Assert.True(responseDelete);
         }

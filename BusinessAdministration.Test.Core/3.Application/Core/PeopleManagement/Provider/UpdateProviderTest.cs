@@ -2,10 +2,13 @@
 using BusinessAdministration.Aplication.Core.PeopleManagement.Customer.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Person;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Provider.Services;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.DocumentType;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.Employed;
+using BusinessAdministration.Aplication.Dto.PeopleManagement.Provider;
 using BusinessAdministration.Domain.Core.PeopleManagement;
 using BusinessAdministration.Domain.Core.PeopleManagement.Customer;
+using BusinessAdministration.Domain.Core.PeopleManagement.Provider;
 using BusinessAdministration.Infrastructure.Data.Persistence.Core.Base.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -22,16 +25,16 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
     {
         [Fact]
         [UnitTest]
-        public void UpdateCustomer_Throw_Exception_when_CustomerId_is_null_or_empty()
+        public void UpdateProviders_Throw_Exception_when_ProviderId_is_null_or_empty()
         {
             var service = new ServiceCollection();
             service.ConfigurePeopleManagementService(new DbSettings());
             var provider = service.BuildServiceProvider();
-            var customerSvc = provider.GetRequiredService<ICustomerService>();
+            var providerSvc = provider.GetRequiredService<IProviderService>();
 
-            Assert.Throws<IdCannotNullOrEmptyException>(() => customerSvc.UpdateCustomer(new CustomerDto
+            Assert.Throws<IdCannotNullOrEmptyException>(() => providerSvc.UpdateProvider(new ProviderDto
             {
-                CustomerId = Guid.Empty,
+                ProviderId = Guid.Empty,
                 DocumentTypeId = Guid.NewGuid(),
             }));
         }
@@ -39,59 +42,59 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
         [UnitTest]
         public void Throw_DontExistIdException_when_id_it_isnt()
         {
-            var customerRepoMock = new Mock<ICustomerRepository>();
-            customerRepoMock
-                 .Setup(x => x.SearchMatching(It.IsAny<Expression<Func<CustomerEntity, bool>>>()))
-                 .Returns(new List<CustomerEntity>());
+            var providerRepoMock = new Mock<IProviderRepository>();
+            providerRepoMock
+                 .Setup(x => x.SearchMatching(It.IsAny<Expression<Func<ProviderEntity, bool>>>()))
+                 .Returns(new List<ProviderEntity>());
             var service = new ServiceCollection();
-            service.AddTransient(_ => customerRepoMock.Object);
+            service.AddTransient(_ => providerRepoMock.Object);
             service.ConfigurePeopleManagementService(new DbSettings());
             var provider = service.BuildServiceProvider();
-            var customerSvc = provider.GetRequiredService<ICustomerService>();
+            var providerSvc = provider.GetRequiredService<IProviderService>();
 
-            var newCustomer = new CustomerDto
+            var newProvider = new ProviderDto
             {
-                CustomerId = Guid.NewGuid(),
+                ProviderId = Guid.NewGuid(),
                 DocumentTypeId = Guid.NewGuid()
             };
-            Assert.Throws<DontExistIdException>(() => customerSvc.UpdateCustomer(newCustomer));
+            Assert.Throws<DontExistIdException>(() => providerSvc.UpdateProvider(newProvider));
         }
 
         [Fact]
         [UnitTest]
-        public void UpdateCustomer_Successfult_Test()
+        public void UpdateProvider_Successfult_Test()
         {
-            var customerRepoMock = new Mock<ICustomerRepository>();
-            customerRepoMock
-               .Setup(x => x.SearchMatching(It.IsAny<Expression<Func<CustomerEntity, bool>>>()))
-               .Returns(new List<CustomerEntity> { new CustomerEntity
+            var providerRepoMock = new Mock<IProviderRepository>();
+            providerRepoMock
+               .Setup(x => x.SearchMatching(It.IsAny<Expression<Func<ProviderEntity, bool>>>()))
+               .Returns(new List<ProviderEntity> { new ProviderEntity
                {
-                   CustomerId = Guid.NewGuid()
+                   ProviderId = Guid.NewGuid()
                }});
-            customerRepoMock
-                 .Setup(x => x.Update(It.IsAny<CustomerEntity>()))
+            providerRepoMock
+                 .Setup(x => x.Update(It.IsAny<ProviderEntity>()))
                  .Returns(() =>
                  {
                      return true;
                  });
             var service = new ServiceCollection();
-            service.AddTransient(_ => customerRepoMock.Object);
+            service.AddTransient(_ => providerRepoMock.Object);
             service.ConfigurePeopleManagementService(new DbSettings());
             var provider = service.BuildServiceProvider();
-            var customerSvc = provider.GetRequiredService<ICustomerService>();
+            var providerSvc = provider.GetRequiredService<IProviderService>();
 
-            var newCustomer = new CustomerDto
+            var newProvider = new ProviderDto
             {
-                CustomerId = Guid.NewGuid(),
+                ProviderId = Guid.NewGuid(),
                 PersonName = "NAME FAKE"
             };
-            var response = customerSvc.UpdateCustomer(newCustomer);
+            var response = providerSvc.UpdateProvider(newProvider);
             Assert.NotEqual(default, response);
             Assert.True(response);
         }
         [Fact]
         [IntegrationTest]
-        public async Task UpdateCustomer_Successfull_IntegrationTest()
+        public async Task UpdateProvider_Successfull_IntegrationTest()
         {
             var service = new ServiceCollection();
             service.ConfigurePeopleManagementService(new DbSettings
@@ -99,55 +102,57 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 ConnectionString = "Data Source=DESKTOP-A52QQCF\\SQLEXPRESS;Initial Catalog=BusinessAdministration;Integrated Security=True"
             });
             var provider = service.BuildServiceProvider();
-            var customerSvc = provider.GetRequiredService<ICustomerService>();
+            var providerSvc = provider.GetRequiredService<IProviderService>();
             var documentTypeSvc = provider.GetRequiredService<IDocumentTypeService>();
 
             var newDocumentType = new DocumentTypeDto
             {
                 DocumentTypeId = Guid.NewGuid(),
-                DocumentType = "PasaportefaKeeee"
+                DocumentType = "Nit"
             };
             var responseAddDocumentType = await documentTypeSvc.AddDocumentType(newDocumentType).ConfigureAwait(false);
-            var newCustomer = new CustomerDto
+            var newProvider = new ProviderDto
             {
                 PersonType = PersonType.NaturalPerson,
                 DocumentTypeId = Guid.Parse(responseAddDocumentType.ToString()),
                 IdentificationNumber = 123,
                 PersonName = "Juanita",
                 PersonLastName = "lastName fake",
+                PersonBusinessName = "fAKEnAME",
                 PersonDateOfBirth = DateTimeOffset.Now,
                 CreationDate = DateTimeOffset.Now,
                 PersonPhoneNumber = 3212224534,
                 PersonEmail = "Fake@gmail.com"
             };
-            var responseAddCustomer = await customerSvc.AddCustomer(newCustomer).ConfigureAwait(false);
-            var updateCustomer = new CustomerDto
+            var responseAddProvider = await providerSvc.AddProvider(newProvider).ConfigureAwait(false);
+            var UpdateProvider = new ProviderDto
             {
-                CustomerId = Guid.Parse(responseAddCustomer.ToString()),
+                ProviderId = Guid.Parse(responseAddProvider.ToString()),
                 PersonType = PersonType.NaturalPerson,
                 DocumentTypeId = Guid.Parse(responseAddDocumentType.ToString()),
                 IdentificationNumber = 133,
                 PersonName = "updateName fake",
                 PersonLastName = "update fake",
+                PersonBusinessName = "fAKEnAME123",
                 PersonDateOfBirth = DateTimeOffset.Now,
                 CreationDate = DateTimeOffset.Now,
                 PersonPhoneNumber = 3212224534,
                 PersonEmail = "Fake-update@gmail.com"
             };
-            var responseUpdateCustomer = customerSvc.UpdateCustomer(updateCustomer);
-            var customerDelete = new CustomerDto
+            var responseUpdateProvider = providerSvc.UpdateProvider(UpdateProvider);
+            var providerDelete = new ProviderDto
             {
-                CustomerId = Guid.Parse(responseAddCustomer.ToString())
+                ProviderId = Guid.Parse(responseAddProvider.ToString())
             };
-            var responseDeleteCustomer = customerSvc.DeleteCustomer(customerDelete);
+            var responseDeleteProvider = providerSvc.DeleteProvider(providerDelete);
             var responseDeleteDocumentType = documentTypeSvc.DeleteDocumentType(newDocumentType);
 
             Assert.NotNull(responseAddDocumentType);
             Assert.NotEqual(default, responseAddDocumentType);
-            Assert.NotEqual(default, responseAddCustomer);
-            Assert.True(responseUpdateCustomer);
+            Assert.NotEqual(default, responseAddProvider);
+            Assert.True(responseUpdateProvider);
             Assert.True(responseDeleteDocumentType);
-            Assert.True(responseDeleteCustomer);
+            Assert.True(responseDeleteProvider);
         }
     }
 

@@ -1,13 +1,13 @@
 ﻿using BusinessAdministration.Aplication.Core.PeopleManagement.Configuration;
-using BusinessAdministration.Aplication.Core.PeopleManagement.Customer.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.DocumentType;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Person;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Provider.Services;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.DocumentType;
-using BusinessAdministration.Aplication.Dto.PeopleManagement.Employed;
+using BusinessAdministration.Aplication.Dto.PeopleManagement.Provider;
 using BusinessAdministration.Domain.Core.PeopleManagement;
-using BusinessAdministration.Domain.Core.PeopleManagement.Customer;
 using BusinessAdministration.Domain.Core.PeopleManagement.DocumentType;
+using BusinessAdministration.Domain.Core.PeopleManagement.Provider;
 using BusinessAdministration.Infrastructure.Data.Persistence.Core.Base.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -24,19 +24,19 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
     {
         [Fact]
         [UnitTest]
-        public async Task AddCustomer_Throw_Exception_when_properties_requires_are_null_or_empty()
+        public async Task AddProvider_Throw_Exception_when_properties_requires_are_null_or_empty()
         {
             var provider = GetProviderWithoutMock();
-            var customerSvc = provider.GetRequiredService<ICustomerService>();
+            var providerSvc = provider.GetRequiredService<IProviderService>();
 
-            await Assert.ThrowsAsync<DocumentTypeIdNotDefinedException>(() => customerSvc.AddCustomer(new CustomerDto
+            await Assert.ThrowsAsync<DocumentTypeIdNotDefinedException>(() => providerSvc.AddProvider(new ProviderDto
             {
                 DocumentTypeId = Guid.Empty,
                 PersonDateOfBirth = DateTimeOffset.Now,
                 CreationDate = DateTimeOffset.Now,
             })).ConfigureAwait(false);
 
-            await Assert.ThrowsAsync<DateOfBirthNotDefinedException>(() => customerSvc.AddCustomer(new CustomerDto
+            await Assert.ThrowsAsync<DateOfBirthNotDefinedException>(() => providerSvc.AddProvider(new ProviderDto
             {
                 DocumentTypeId = Guid.NewGuid(),
                 PersonDateOfBirth = default,
@@ -49,9 +49,9 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
         public async Task Throw_CreationDateNotDefinedException_when_DateOfBirth_is_null_or_default()
         {
             var provider = GetProviderWithoutMock();
-            var customerSvc = provider.GetRequiredService<ICustomerService>();
+            var providerSvc = provider.GetRequiredService<IProviderService>();
 
-            await Assert.ThrowsAsync<CreationDateNotDefinedException>(() => customerSvc.AddCustomer(new CustomerDto
+            await Assert.ThrowsAsync<CreationDateNotDefinedException>(() => providerSvc.AddProvider(new ProviderDto
             {
                 DocumentTypeId = Guid.NewGuid(),
                 PersonDateOfBirth = DateTimeOffset.Now,
@@ -61,82 +61,89 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
 
         [Fact]
         [UnitTest]
-        public async Task Throw_AlreadyExistException_when_there_are_two_persons_with_same_Name()
+        public async Task Throw_AlreadyExistException_when_there_are_two_persons_with_same_Name_and_Business_name()
         {
-            var customerRepoMock = new Mock<ICustomerRepository>();
-            customerRepoMock
-                .Setup(m => m.GetAll<CustomerEntity>())
-                .Returns(new List<CustomerEntity> { new CustomerEntity
+            var providerRepoMock = new Mock<IProviderRepository>();
+            providerRepoMock
+                .Setup(m => m.GetAll<ProviderEntity>())
+                .Returns(new List<ProviderEntity> { new ProviderEntity
                 {
-                   CustomerId = Guid.NewGuid(),
-                   PersonName = "Pepito"
+                   ProviderId = Guid.NewGuid(),
+                   PersonName = "Pepito",
+                   PersonBusinessName = "NameFake"
+
                 }});
 
             var service = new ServiceCollection();
-            service.AddTransient(_ => customerRepoMock.Object);
+            service.AddTransient(_ => providerRepoMock.Object);
             service.ConfigurePeopleManagementService(new DbSettings());
             var provider = service.BuildServiceProvider();
-            var customerSvc = provider.GetRequiredService<ICustomerService>();
+            var providerSvc = provider.GetRequiredService<IProviderService>();
 
-            var newCustomer = new CustomerDto
+            var newProvider = new ProviderDto
             {
                 DocumentTypeId = Guid.NewGuid(),
                 IdentificationNumber = 123,
                 PersonDateOfBirth = DateTimeOffset.Now,
                 CreationDate = DateTimeOffset.Now,
-                PersonName = "Pepito"
+                PersonName = "Pepito",
+                PersonBusinessName = "NameFake"
             };
             var response = await Assert.ThrowsAsync<AlreadyExistException>(() =>
-                customerSvc.AddCustomer(newCustomer)).ConfigureAwait(false);
+                providerSvc.AddProvider(newProvider)).ConfigureAwait(false);
             Assert.NotNull(response);
-            Assert.Equal($"ya existe alguien con el nombre:  {newCustomer.PersonName}", response.Message);
+            Assert.Equal($"ya existe alguien con el nombre : {newProvider.PersonName} y razon social:{newProvider.PersonBusinessName}", response.Message);
         }
         [Fact]
         [UnitTest]
         public async Task Throw_AlreadyExistException_when_there_are_two_persons_with_same_IdentificationNumber_and_typeDocument()
         {
-            var customerRepoMock = new Mock<ICustomerRepository>();
-            customerRepoMock
-                .Setup(m => m.GetAll<CustomerEntity>())
-                .Returns(new List<CustomerEntity> { new CustomerEntity
+            var providerRepoMock = new Mock<IProviderRepository>();
+            providerRepoMock
+                .Setup(m => m.GetAll<ProviderEntity>())
+                .Returns(new List<ProviderEntity> { new ProviderEntity
                 {
                    DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0592"),
                    IdentificationNumber = 123,
-                   PersonName="Juanito"
+                   PersonName="Juanito",
+                   PersonBusinessName = "NameFake"
                 }});
 
             var service = new ServiceCollection();
-            service.AddTransient(_ => customerRepoMock.Object);
+            service.AddTransient(_ => providerRepoMock.Object);
             service.ConfigurePeopleManagementService(new DbSettings());
             var provider = service.BuildServiceProvider();
-            var customerSvc = provider.GetRequiredService<ICustomerService>();
+            var providerSvc = provider.GetRequiredService<IProviderService>();
 
-            var newCustomer = new CustomerDto
+            var newProvider = new ProviderDto
             {
                 DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0592"),
                 IdentificationNumber = 123,
                 PersonDateOfBirth = DateTimeOffset.Now,
                 CreationDate = DateTimeOffset.Now,
+                PersonBusinessName = "OtherNameFake"
+
             };
             var response = await Assert.ThrowsAsync<AlreadyExistException>(() =>
-                customerSvc.AddCustomer(newCustomer)).ConfigureAwait(false);
+                providerSvc.AddProvider(newProvider)).ConfigureAwait(false);
             Assert.NotNull(response);
-            Assert.Equal($"ya existe alguien el mismo numero de indentificación y tipo de documento: { newCustomer.IdentificationNumber}", response.Message);
+            Assert.Equal($"ya existe alguien el mismo numero de indentificación y tipo de documento: { newProvider.IdentificationNumber}", response.Message);
         }
 
         [Fact]
         [UnitTest]
         public async Task Throws_NoExistDocumentTypeException_when_DoncumentType_dont_exist()
         {
-            var customerRepoMock = new Mock<ICustomerRepository>();
-            customerRepoMock
-                .Setup(m => m.GetAll<CustomerEntity>())
-                .Returns(new List<CustomerEntity> { new CustomerEntity
+            var providerRepoMock = new Mock<IProviderRepository>();
+            providerRepoMock
+                .Setup(m => m.GetAll<ProviderEntity>())
+                .Returns(new List<ProviderEntity> { new ProviderEntity
                 {
                    DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0592"),
                    IdentificationNumber = 183,
                    PersonName="Juanito",
                    DocumentType = new DocumentTypeEntity { DocumentType = "Nit"},
+                   PersonBusinessName = "NameFake"
                 }});
             var DocumentTypeRepoMock = new Mock<IDocumentTypeRepository>();
             DocumentTypeRepoMock
@@ -144,38 +151,74 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 .Returns(new List<DocumentTypeEntity>());
 
             var service = new ServiceCollection();
-            service.AddTransient(_ => customerRepoMock.Object);
+            service.AddTransient(_ => providerRepoMock.Object);
             service.AddTransient(_ => DocumentTypeRepoMock.Object);
             service.ConfigurePeopleManagementService(new DbSettings());
             var provider = service.BuildServiceProvider();
-            var customerSvc = provider.GetRequiredService<ICustomerService>();
+            var providerSvc = provider.GetRequiredService<IProviderService>();
 
-            var newCustomer = new CustomerDto
+            var newProvider = new ProviderDto
             {
                 DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0597"),
                 IdentificationNumber = 123,
                 PersonName = "Juanita",
                 PersonDateOfBirth = DateTimeOffset.Now,
                 CreationDate = DateTimeOffset.Now,
+                PersonBusinessName = "OtherNameFake"
             };
             var response = await Assert.ThrowsAsync<NoExistDocumentTypeException>(() =>
-                customerSvc.AddCustomer(newCustomer)).ConfigureAwait(false);
+                providerSvc.AddProvider(newProvider)).ConfigureAwait(false);
         }
 
         [Fact]
         [UnitTest]
-        public async Task Throws_CannotBeCorporatePersonException_when_Person_is_have_document_type_NIT()
+        public async Task Throws_CannotBeNaturalPersonException_when_Person_is_have_document_type_diferent_NIT()
         {
-            var customerRepoMock = new Mock<ICustomerRepository>();
-            customerRepoMock
-                .Setup(m => m.GetAll<CustomerEntity>())
-                .Returns(new List<CustomerEntity> { new CustomerEntity
+            var providerRepoMock = new Mock<IProviderRepository>();
+            providerRepoMock
+                .Setup(m => m.GetAll<ProviderEntity>())
+                .Returns(new List<ProviderEntity> { new ProviderEntity
                 {
                    DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0592"),
                    IdentificationNumber = 183,
                    PersonName="Juanito",
                    DocumentType = new DocumentTypeEntity { DocumentType = "Nit"},
+                   PersonBusinessName = "NameFake"
                 }});
+            var DocumentTypeRepoMock = new Mock<IDocumentTypeRepository>();
+            DocumentTypeRepoMock
+                .Setup(m => m.SearchMatching(It.IsAny<Expression<Func<DocumentTypeEntity, bool>>>()))
+                .Returns(new List<DocumentTypeEntity> { new DocumentTypeEntity
+                {
+                    DocumentTypeId = Guid.NewGuid(),
+                    DocumentType= "Cedula"
+                }});
+            var service = new ServiceCollection();
+            service.AddTransient(_ => providerRepoMock.Object);
+            service.AddTransient(_ => DocumentTypeRepoMock.Object);
+            service.ConfigurePeopleManagementService(new DbSettings());
+            var provider = service.BuildServiceProvider();
+            var providerSvc = provider.GetRequiredService<IProviderService>();
+
+            var newProvider = new ProviderDto
+            {
+                DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0597"),
+                IdentificationNumber = 123,
+                PersonName = "Juanita",
+                PersonDateOfBirth = DateTimeOffset.Now,
+                CreationDate = DateTimeOffset.Now,
+                PersonBusinessName = "OtherNameFake"
+            };
+            var response = await Assert.ThrowsAsync<CannotBeNaturalPersonException>(() =>
+                providerSvc.AddProvider(newProvider)).ConfigureAwait(false);
+            Assert.NotNull(response);
+            Assert.Equal("Una persona no puede tener un tipo de documento diferente a Nit", response.Message);
+        }
+
+        [Fact]
+        [UnitTest]
+        public async Task Add_provider_successfull()
+        {
             var DocumentTypeRepoMock = new Mock<IDocumentTypeRepository>();
             DocumentTypeRepoMock
                 .Setup(m => m.SearchMatching(It.IsAny<Expression<Func<DocumentTypeEntity, bool>>>()))
@@ -184,67 +227,35 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                     DocumentTypeId = Guid.NewGuid(),
                     DocumentType= "Nit"
                 }});
-            var service = new ServiceCollection();
-            service.AddTransient(_ => customerRepoMock.Object);
-            service.AddTransient(_ => DocumentTypeRepoMock.Object);
-            service.ConfigurePeopleManagementService(new DbSettings());
-            var provider = service.BuildServiceProvider();
-            var customerSvc = provider.GetRequiredService<ICustomerService>();
-
-            var newCustomer = new CustomerDto
-            {
-                DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0597"),
-                IdentificationNumber = 123,
-                PersonName = "Juanita",
-                PersonDateOfBirth = DateTimeOffset.Now,
-                CreationDate = DateTimeOffset.Now,
-            };
-            var response = await Assert.ThrowsAsync<CannotBeCorporatePersonException>(() =>
-                customerSvc.AddCustomer(newCustomer)).ConfigureAwait(false);
-            Assert.NotNull(response);
-            Assert.Equal("Una persona no puede tener un tipo de documento Nit", response.Message);
-        }
-
-        [Fact]
-        [UnitTest]
-        public async Task Add_customer_successfull()
-        {
-            var DocumentTypeRepoMock = new Mock<IDocumentTypeRepository>();
-            DocumentTypeRepoMock
-                .Setup(m => m.SearchMatching(It.IsAny<Expression<Func<DocumentTypeEntity, bool>>>()))
-                .Returns(new List<DocumentTypeEntity> { new DocumentTypeEntity
-                {
-                    DocumentTypeId = Guid.NewGuid(),
-                    DocumentType= "Cédula"
-                }});
-            var customerRepoMock = new Mock<ICustomerRepository>();
-            customerRepoMock
-                .Setup(m => m.GetAll<CustomerEntity>())
-                .Returns(new List<CustomerEntity> { new CustomerEntity
+            var providerRepoMock = new Mock<IProviderRepository>();
+            providerRepoMock
+                .Setup(m => m.GetAll<ProviderEntity>())
+                .Returns(new List<ProviderEntity> { new ProviderEntity
                 {
                    DocumentTypeId = Guid.Parse("ac620062-11b7-4a11-95c6-7825c68c0598"),
                    IdentificationNumber = 183,
                    PersonName="Juanito",
-                   DocumentType = new DocumentTypeEntity { DocumentType = "Cédula"},
+                   DocumentType = new DocumentTypeEntity { DocumentType = "Nit"},
                    PersonType = PersonType.NaturalPerson,
+                   PersonBusinessName = "NameFake"
                 }});
-            customerRepoMock
-                .Setup(emok => emok.Insert(It.IsAny<CustomerEntity>()))
+            providerRepoMock
+                .Setup(emok => emok.Insert(It.IsAny<ProviderEntity>()))
                 .Returns(() =>
                 {
-                    return Task.FromResult(new CustomerEntity
+                    return Task.FromResult(new ProviderEntity
                     {
-                        CustomerId = Guid.NewGuid()
+                        ProviderId = Guid.NewGuid()
                     });
                 });
             var service = new ServiceCollection();
-            service.AddTransient(_ => customerRepoMock.Object);
+            service.AddTransient(_ => providerRepoMock.Object);
             service.AddTransient(_ => DocumentTypeRepoMock.Object);
             service.ConfigurePeopleManagementService(new DbSettings());
             var provider = service.BuildServiceProvider();
-            var customerSvc = provider.GetRequiredService<ICustomerService>();
+            var providerSvc = provider.GetRequiredService<IProviderService>();
 
-            var newCustomer = new CustomerDto
+            var newProvider = new ProviderDto
             {
                 PersonDateOfBirth = DateTimeOffset.Now,
                 CreationDate = DateTimeOffset.Now,
@@ -252,9 +263,10 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 IdentificationNumber = 123,
                 PersonName = "Juanita",
                 PersonType = PersonType.NaturalPerson,
+                PersonBusinessName = "OtherNameFake"
             };
 
-            var response = await customerSvc.AddCustomer(newCustomer).ConfigureAwait(false);
+            var response = await providerSvc.AddProvider(newProvider).ConfigureAwait(false);
             Assert.NotNull(response);
             Assert.NotEqual(default, response);
         }
@@ -269,16 +281,16 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 ConnectionString = "Data Source=DESKTOP-A52QQCF\\SQLEXPRESS;Initial Catalog=BusinessAdministration;Integrated Security=True"
             });
             var provider = service.BuildServiceProvider();
-            var customerSvc = provider.GetRequiredService<ICustomerService>();
+            var providerSvc = provider.GetRequiredService<IProviderService>();
             var documentTypeSvc = provider.GetRequiredService<IDocumentTypeService>();
 
             var newDocumentType = new DocumentTypeDto
             {
                 DocumentTypeId = Guid.NewGuid(),
-                DocumentType = "PasaportefaKeeee"
+                DocumentType = "Nit"
             };
             var responseAddDocumentType = await documentTypeSvc.AddDocumentType(newDocumentType).ConfigureAwait(false);
-            var newCustomer = new CustomerDto
+            var newProvider = new ProviderDto
             {
                 PersonType = PersonType.NaturalPerson,
                 DocumentTypeId = Guid.Parse(responseAddDocumentType.ToString()),
@@ -288,21 +300,22 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 PersonDateOfBirth = DateTimeOffset.Now,
                 CreationDate = DateTimeOffset.Now,
                 PersonPhoneNumber = 3212224534,
-                PersonEmail = "Fake@gmail.com"
+                PersonEmail = "Fake@gmail.com",
+                PersonBusinessName = "NameFake"
             };
-            var responseAddCustomer = await customerSvc.AddCustomer(newCustomer).ConfigureAwait(false);
-            var customerDelete = new CustomerDto
+            var responseAddProvider = await providerSvc.AddProvider(newProvider).ConfigureAwait(false);
+            var providerDelete = new ProviderDto
             {
-                CustomerId = Guid.Parse(responseAddCustomer.ToString())
+                ProviderId = Guid.Parse(responseAddProvider.ToString())
             };
-            var responseDeleteCustomer = customerSvc.DeleteCustomer(customerDelete);
+            var responseDeleteProvider = providerSvc.DeleteProvider(providerDelete);
             var responseDeleteDocumentType = documentTypeSvc.DeleteDocumentType(newDocumentType);
 
             Assert.NotNull(responseAddDocumentType);
             Assert.NotEqual(default, responseAddDocumentType);
-            Assert.NotEqual(default, responseAddCustomer);
+            Assert.NotEqual(default, responseAddProvider);
             Assert.True(responseDeleteDocumentType);
-            Assert.True(responseDeleteCustomer);
+            Assert.True(responseDeleteProvider);
         }
         private static ServiceProvider GetProviderWithoutMock()
         {

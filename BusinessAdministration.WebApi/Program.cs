@@ -1,8 +1,5 @@
-using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
-using System;
-using System.Linq;
 
 namespace BusinessAdministration.WebApi
 {
@@ -13,20 +10,11 @@ namespace BusinessAdministration.WebApi
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IWebHostBuilder CreateHostBuilder(string[] args)
-        {
-            IWebHostEnvironment? hostEnvironment = null;
-
-            return WebHost.CreateDefaultBuilder(args)
-                .UseContentRoot(AppContext.BaseDirectory)
-                .ConfigureServices(services =>
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureWebHostDefaults(webBuilder =>
                 {
-                    hostEnvironment = services
-                    .Where(x => x.ServiceType == typeof(IWebHostEnvironment))
-                    .Select(x => (IWebHostEnvironment)x.ImplementationInstance)
-                    .First();
-                })
-                .UseStartup<Startup>();
-        }
+                    webBuilder.UseStartup<Startup>();
+                });
     }
 }

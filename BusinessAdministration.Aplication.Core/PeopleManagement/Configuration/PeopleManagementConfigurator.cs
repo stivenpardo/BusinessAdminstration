@@ -1,5 +1,7 @@
 ﻿using BusinessAdministration.Aplication.Core.Mapper.Configuration;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Customer;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Customer.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Employed;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Services;
@@ -21,6 +23,8 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Configuration
             services.TryAddTransient<IDocumentTypeService, DocumentTypeService>();
             services.TryAddTransient<IEmployedService, EmployedService>();
             services.TryAddTransient<IEmployedFacade, EmployedFacade>();
+            services.TryAddTransient<ICustomerService, CustomerService>();
+            services.TryAddTransient<ICustomerFacade, CustomerFacade>();
 
             services.ConfigureMapper();
             services.ConfigureBaseRepository(settings);

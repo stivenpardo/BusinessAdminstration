@@ -524,7 +524,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
 
         [Fact]
         [IntegrationTest]
-        public async Task Add_and_delte_Employed_Successfull_IntegrationTest()
+        public async Task Add_and_delete_Employed_Successfull_IntegrationTest()
         {
             var service = new ServiceCollection();
             service.ConfigurePeopleManagementService(new DbSettings

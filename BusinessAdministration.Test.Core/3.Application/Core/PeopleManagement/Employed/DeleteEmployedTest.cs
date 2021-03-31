@@ -18,7 +18,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
     {
         [Fact]
         [UnitTest]
-        public void DeleteEmployed_Throw_IdCannotNullOrEmptyException_when_AreaId_is_null_or_empty()
+        public void DeleteEmployed_Throw_IdCannotNullOrEmptyException_when_EmployedId_is_null_or_empty()
         {
             var service = new ServiceCollection();
             service.ConfigurePeopleManagementService(new DbSettings());

@@ -1,6 +1,6 @@
 ﻿using BusinessAdministration.Aplication.Core.PeopleManagement.Configuration;
-using BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Services;
-using BusinessAdministration.Domain.Core.PeopleManagement.Employed;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Customer.Services;
+using BusinessAdministration.Domain.Core.PeopleManagement.Customer;
 using BusinessAdministration.Infrastructure.Data.Persistence.Core.Base.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -12,39 +12,38 @@ using Xunit.Categories;
 
 namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.Customer
 {
-    public class GetAllEmployedTest
+    public class GetAllCustomerTest
     {
-
         [Fact]
         [UnitTest]
         public async Task Get_All_Successful()
         {
-            var employedRepoMock = new Mock<IEmployedRepository>();
-            employedRepoMock
-                .Setup(m => m.GetAll<EmployedEntity>())
-                .Returns(new List<EmployedEntity> { new EmployedEntity
+            var customerRepoMock = new Mock<ICustomerRepository>();
+            customerRepoMock
+                .Setup(m => m.GetAll<CustomerEntity>())
+                .Returns(new List<CustomerEntity> { new CustomerEntity
                 {
-                    EmployedId= Guid.NewGuid(),
-                    EmployedCode= Guid.NewGuid(),
+                    CustomerId= Guid.NewGuid(),
+                    DocumentTypeId= Guid.NewGuid(),
                 },
-                 new EmployedEntity
+                 new CustomerEntity
                 {
-                    EmployedId= Guid.NewGuid(),
-                    EmployedCode= Guid.NewGuid()
+                    CustomerId= Guid.NewGuid(),
+                    DocumentTypeId= Guid.NewGuid(),
                 }});
             var service = new ServiceCollection();
-            service.AddTransient(_ => employedRepoMock.Object);
+            service.AddTransient(_ => customerRepoMock.Object);
             service.ConfigurePeopleManagementService(new DbSettings());
             var provider = service.BuildServiceProvider();
-            var employedSvc = provider.GetRequiredService<IEmployedService>();
+            var customerSvc = provider.GetRequiredService<ICustomerService>();
+            var response = await customerSvc.GetAll().ConfigureAwait(false);
 
-            var response = await employedSvc.GetAll().ConfigureAwait(false);
             Assert.NotNull(response);
             Assert.NotEqual(default, response);
         }
         [Fact]
         [IntegrationTest]
-        public async Task GetAllEmployed_Successfull_IntegrationTest()
+        public async Task GetAllCustomer_Successfull_IntegrationTest()
         {
             var service = new ServiceCollection();
             service.ConfigurePeopleManagementService(new DbSettings
@@ -52,10 +51,9 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 ConnectionString = "Data Source=DESKTOP-A52QQCF\\SQLEXPRESS;Initial Catalog=BusinessAdministration;Integrated Security=True"
             });
             var provider = service.BuildServiceProvider();
-            var employedSvc = provider.GetRequiredService<IEmployedService>();
-            var responseSearch = await employedSvc.GetAll().ConfigureAwait(false);
+            var customerSvc = provider.GetRequiredService<ICustomerService>();
+            var responseSearch = await customerSvc.GetAll().ConfigureAwait(false);
             Assert.NotEqual(default, responseSearch);
         }
-
     }
 }

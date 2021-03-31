@@ -5,6 +5,8 @@ using BusinessAdministration.Aplication.Core.PeopleManagement.Customer.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Employed;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Services;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Provider;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Provider.Services;
 using BusinessAdministration.Infrastructure.Data.Persistence.Core.Base.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -25,6 +27,8 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Configuration
             services.TryAddTransient<IEmployedFacade, EmployedFacade>();
             services.TryAddTransient<ICustomerService, CustomerService>();
             services.TryAddTransient<ICustomerFacade, CustomerFacade>();
+            services.TryAddTransient<IProviderService, ProviderService>();
+            services.TryAddTransient<IProviderFacade, ProviderFacade>();
 
             services.ConfigureMapper();
             services.ConfigureBaseRepository(settings);

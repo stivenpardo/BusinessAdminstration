@@ -556,7 +556,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 AreaId = Guid.Parse(responseAddArea.ToString()),
                 DocumentTypeId = Guid.Parse(responseAddDocumentType.ToString()),
                 IdentificationNumber = 123,
-                PersonName = "Juanita",
+                PersonName = "JuanitaFake",
                 PersonLastName = "lastName fake",
                 PersonDateOfBirth = DateTimeOffset.Now,
                 CreationDate = DateTimeOffset.Now,

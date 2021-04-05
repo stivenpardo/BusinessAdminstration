@@ -12,6 +12,8 @@ namespace BusinessAdministration.Test.Core._5.Infrastrucutre._5._1Data.Base
 {
     public class RepositoryBase
     {
+        //TODO:Michael, hacer el los test unitarios y de integración
+        //para los metodos del repositoriobase
         //[Fact]
         //[UnitTest]
         //public async Task Test_insert_call_AddAsync_inunitofwork()

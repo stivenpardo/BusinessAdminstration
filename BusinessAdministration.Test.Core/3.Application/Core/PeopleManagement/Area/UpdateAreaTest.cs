@@ -1,9 +1,15 @@
 ﻿using BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Configuration;
+using BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.Services;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Area;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Exceptions.Person;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.Area;
+using BusinessAdministration.Aplication.Dto.PeopleManagement.DocumentType;
+using BusinessAdministration.Aplication.Dto.PeopleManagement.Employed;
+using BusinessAdministration.Domain.Core.PeopleManagement;
 using BusinessAdministration.Domain.Core.PeopleManagement.Area;
+using BusinessAdministration.Domain.Core.PeopleManagement.Employed;
 using BusinessAdministration.Infrastructure.Data.Persistence.Core.Base.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -92,26 +98,71 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
         [IntegrationTest]
         public async Task UpdateArea_Successfull_IntegrationTest()
         {
-            //TODO: Michael have to creato employed for create area. 
             var service = new ServiceCollection();
             service.ConfigurePeopleManagementService(new DbSettings
             {
                 ConnectionString = "Data Source=DESKTOP-A52QQCF\\SQLEXPRESS;Initial Catalog=BusinessAdministration;Integrated Security=True"
             });
             var provider = service.BuildServiceProvider();
+            var employedSvc = provider.GetRequiredService<IEmployedService>();
+            var documentTypeSvc = provider.GetRequiredService<IDocumentTypeService>();
             var areaSvc = provider.GetRequiredService<IAreaService>();
 
-            var responseSearch = await areaSvc.GetAll().ConfigureAwait(false);
-            var area = responseSearch.FirstOrDefault();
-            var newArea = new AreaDto
+            var newDocumentType = new DocumentTypeDto
             {
-                AreaId = area.AreaId,
+                DocumentTypeId = Guid.NewGuid(),
+                DocumentType = "PasaportefaKeeeeArea"
+            };
+            var responseAddDocumentType = await documentTypeSvc.AddDocumentType(newDocumentType).ConfigureAwait(false);
+            var newArea = new AreaRequestDto
+            {
+                AreaName = "Fake areaArea"
+            };
+            var responseAddArea = await areaSvc.AddArea(newArea).ConfigureAwait(false);
+            var newEmployed = new EmployedDto
+            {
+                EmployedId = Guid.NewGuid(),
+                EmployedCode = Guid.NewGuid(),
+                PersonType = PersonType.NaturalPerson,
+                EmployedPosition = EmployedPosition.Developer,
+                AreaId = Guid.Parse(responseAddArea.ToString()),
+                DocumentTypeId = Guid.Parse(responseAddDocumentType.ToString()),
+                IdentificationNumber = 123,
+                PersonName = "Juanita",
+                PersonLastName = "lastName fake",
+                PersonDateOfBirth = DateTimeOffset.Now,
+                CreationDate = DateTimeOffset.Now,
+                PersonPhoneNumber = 3212224534,
+                PersonEmail = "Fake@gmail.com"
+            };
+            var responseAddEmployed = await employedSvc.AddEmployed(newEmployed).ConfigureAwait(false);
+            var newAreaUpdate = new AreaDto
+            {
+                AreaId = Guid.Parse(responseAddArea.ToString()),
                 AreaName = "updateArea"
             };
-            var responseUpdate = areaSvc.UpdateArea(newArea);
-            Assert.NotEqual(default, responseSearch);
-            Assert.NotNull(responseSearch);
+            var responseUpdate = areaSvc.UpdateArea(newAreaUpdate);
+            var employedDelete = new EmployedRequestDto
+            {
+                EmployedId = Guid.Parse(responseAddEmployed.ToString())
+            };
+            var responseDeleteEmployed = employedSvc.DeleteEmployed(employedDelete);
+            var responseDeleteDocumentType = documentTypeSvc.DeleteDocumentType(newDocumentType);
+            var areaDelete = new AreaDto
+            {
+                AreaId = Guid.Parse(responseAddArea.ToString())
+            };
+            var responseDeleArea = areaSvc.DeleteArea(areaDelete);
+
+            Assert.NotNull(responseAddDocumentType);
+            Assert.NotNull(responseAddArea);
+            Assert.NotEqual(default, responseAddDocumentType);
+            Assert.NotEqual(default, responseAddArea);
+            Assert.NotEqual(default, responseAddEmployed);
+            Assert.True(responseDeleteDocumentType);
             Assert.True(responseUpdate);
+            Assert.True(responseDeleArea);
+            Assert.True(responseDeleteEmployed);            
         }
     }
 }

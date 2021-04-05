@@ -24,8 +24,16 @@ namespace BusinessAdministration.WebApi.Controllers
         public async Task<EmployedResponseDto> CreateEmployed(EmployedDto request) =>
             await _employedFacade.CreateEmployed(request).ConfigureAwait(false);
 
-        [HttpGet]
+        [HttpGet(nameof(GetAllEmployees))]
         public async Task<IEnumerable<EmployedDto>> GetAllEmployees() =>
-            await _employedFacade.GetAllEmployees().ConfigureAwait(false);
+             await _employedFacade.GetAllEmployees().ConfigureAwait(false);
+
+        [HttpPost(nameof(UpdateEmployed))]
+        public EmployedResponseDto UpdateEmployed(EmployedDto request) =>
+            _employedFacade.UpdateEmployed(request);
+        
+        [HttpPost(nameof(DeleteEmployed))]
+        public EmployedResponseDto DeleteEmployed(EmployedRequestDto request) =>
+            _employedFacade.DeleteEmployed(request);
     }
 }

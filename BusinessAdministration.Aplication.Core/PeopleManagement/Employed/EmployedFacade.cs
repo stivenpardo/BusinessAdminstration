@@ -31,7 +31,7 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Employed
                 StatusDescription = response ? "Inserted employee " : "Not inserted employee",
             };
         }
-        public Task<IEnumerable<EmployedDto>> GetAllEmployees() => _employedSvc.GetAll();
+        public async Task<IEnumerable<EmployedDto>> GetAllEmployees() => await _employedSvc.GetAll().ConfigureAwait(false);
         public EmployedResponseDto UpdateEmployed(EmployedDto request)
         {
             var response = _employedSvc.UpdateEmployed(request);

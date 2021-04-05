@@ -1,8 +1,10 @@
 ﻿using BusinessAdministration.Aplication.Core.ExportAndImportJSON.Configuration;
 using BusinessAdministration.Aplication.Core.Mapper.Configuration;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Area;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Customer;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Customer.Services;
+using BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType;
 using BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.Services;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Employed;
 using BusinessAdministration.Aplication.Core.PeopleManagement.Employed.Services;
@@ -23,7 +25,9 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Configuration
         public static void ConfigurePeopleManagementService(this IServiceCollection services, DbSettings settings)
         {
             services.TryAddTransient<IAreaService, AreaService>();
+            services.TryAddTransient<IAreaFacade, AreaFacade>();
             services.TryAddTransient<IDocumentTypeService, DocumentTypeService>();
+            services.TryAddTransient<IDocumentTypeFacade, DocumentTypeFacade>();
             services.TryAddTransient<IEmployedService, EmployedService>();
             services.TryAddTransient<IEmployedFacade, EmployedFacade>();
             services.TryAddTransient<ICustomerService, CustomerService>();

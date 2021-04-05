@@ -2,7 +2,9 @@
 using BusinessAdministration.Aplication.Core.ExportAndImportJSON.Configuration;
 using BusinessAdministration.Aplication.Core.ExportAndImportJSON.Exceptions;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.Employed;
+using BusinessAdministration.Domain.Core.PeopleManagement;
 using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
@@ -29,68 +31,74 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.ExportAndImportJs
             }};
             await Assert.ThrowsAsync<NotDefinedPathException>(async () => await ExportAndImportJson.ExportJson("", dtoCustomer).ConfigureAwait(false)).ConfigureAwait(false);
         }
-        //[Fact]
-        //[UnitTest]
-        //public async Task Export_Full()
-        //{
-        //    var service = new ServiceCollection();
+        [Fact]
+        [UnitTest]
+        public async Task Export_Full()
+        {
+            var service = new ServiceCollection();
 
-        //    service.ConfigureExportAndImportJson();
-        //    var provider = service.BuildServiceProvider();
-        //    var ExportAndImportJson = provider.GetRequiredService<IExportAndImportJson>();
+            service.ConfigureExportAndImportJson();
+            var provider = service.BuildServiceProvider();
+            var ExportAndImportJson = provider.GetRequiredService<IExportAndImportJson>();
 
-        //    var dtoCustomer = new CustomerDto
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        Nombre = "IntegracionPersona",
-        //        Apellido = "IntegracionPersona",
-        //        FechaNacimiento = DateTimeOffset.Now,
-        //        FechaRegistro = DateTimeOffset.Now,
-        //        NumeroTelefono = 123456789,
-        //        CorreoElectronico = "fake@fake.fake",
-        //    };
+            var dtoCustomer = new CustomerDto
+            {
+                PersonType = PersonType.NaturalPerson,
+                DocumentTypeId = Guid.NewGuid(),
+                IdentificationNumber = 123,
+                PersonName = "Juanita",
+                PersonLastName = "lastName fake",
+                PersonDateOfBirth = DateTimeOffset.Now,
+                CreationDate = DateTimeOffset.Now,
+                PersonPhoneNumber = 3212224534,
+                PersonEmail = "Fake@gmail.com"
+            };
 
-        //    var result = await ExportAndImportJson.ExportJson("ExportCliente", new List<CustomerDto> { dtoCustomer }).ConfigureAwait(false);
-        //    var dtoCustomerList = new List<CustomerDto>{ new CustomerDto
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        Nombre = "IntegracionPersona",
-        //        Apellido = "IntegracionPersona",
-        //        FechaNacimiento = DateTimeOffset.Now,
-        //        FechaRegistro = DateTimeOffset.Now,
-        //        NumeroTelefono = 123456789,
-        //        CorreoElectronico = "fake@fake.fake",
-        //    },
-        //    new CustomerDto
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        Nombre = "IntegracionPersona",
-        //        Apellido = "IntegracionPersona",
-        //        FechaNacimiento = DateTimeOffset.Now,
-        //        FechaRegistro = DateTimeOffset.Now,
-        //        NumeroTelefono = 123456789,
-        //        CorreoElectronico = "fake@fake.fake",
-        //    }};
-        //    var result2 = await ExportAndImportJson.ExportJson("ExportListCliente", dtoCustomerList).ConfigureAwait(false);
+            var result = await ExportAndImportJson.ExportJson("ExportCliente", new List<CustomerDto> { dtoCustomer }).ConfigureAwait(false);
+            var dtoCustomerList = new List<CustomerDto>{ new CustomerDto
+            {
+                PersonType = PersonType.NaturalPerson,
+                DocumentTypeId = Guid.NewGuid(),
+                IdentificationNumber = 123,
+                PersonName = "Juanita1",
+                PersonLastName = "lastName fake",
+                PersonDateOfBirth = DateTimeOffset.Now,
+                CreationDate = DateTimeOffset.Now,
+                PersonPhoneNumber = 3212224534,
+                PersonEmail = "Fake@gmail.com"
+            },
+            new CustomerDto
+            {
+                PersonType = PersonType.NaturalPerson,
+                DocumentTypeId = Guid.NewGuid(),
+                IdentificationNumber = 123,
+                PersonName = "Juanita2",
+                PersonLastName = "lastName fake",
+                PersonDateOfBirth = DateTimeOffset.Now,
+                CreationDate = DateTimeOffset.Now,
+                PersonPhoneNumber = 3212224534,
+                PersonEmail = "Fake@gmail.com"
+            }};
+            var result2 = await ExportAndImportJson.ExportJson("ExportListCliente", dtoCustomerList).ConfigureAwait(false);
 
-        //    Assert.NotNull(result);
-        //    Assert.NotNull(result2);
-        //}
-        //[Fact]
-        //[UnitTest]
-        //public async Task Import_Full()
-        //{
-        //    var service = new ServiceCollection();
+            Assert.NotNull(result);
+            Assert.NotNull(result2);
+        }
+        [Fact]
+        [UnitTest]
+        public async Task Import_Full()
+        {
+            var service = new ServiceCollection();
 
-        //    service.ConfigureExportAndImportJson();
-        //    var provider = service.BuildServiceProvider();
-        //    var ExportAndImportJson = provider.GetRequiredService<IExportAndImportJson>();
+            service.ConfigureExportAndImportJson();
+            var provider = service.BuildServiceProvider();
+            var ExportAndImportJson = provider.GetRequiredService<IExportAndImportJson>();
 
-        //    var result = await ExportAndImportJson.ImportJson<IEnumerable<CustomerDto>>("ExportCliente").ConfigureAwait(false);
-        //    var result2 = await ExportAndImportJson.ImportJson<IEnumerable<CustomerDto>>("ExportListCliente").ConfigureAwait(false);
+            var result = await ExportAndImportJson.ImportJson<IEnumerable<CustomerDto>>("ExportCliente").ConfigureAwait(false);
+            var result2 = await ExportAndImportJson.ImportJson<IEnumerable<CustomerDto>>("ExportListCliente").ConfigureAwait(false);
 
-        //    Assert.NotNull(result);
-        //    Assert.NotNull(result2);
-        //}
+            Assert.NotNull(result);
+            Assert.NotNull(result2);
+        }
     }
 }

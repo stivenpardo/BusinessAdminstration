@@ -29,13 +29,14 @@ namespace BusinessAdministration.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
+            
             services.AddControllers();
             services.AddSwaggerGen(c =>
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "BusineesAdministration.WebApi", Version = "v1" })
             );
             var dbSettings = Configuration.GetSection("DbConnectionString").Get<string>();
-            services.ConfigurePeopleManagementService(new DbSettings { ConnectionString = dbSettings }); 
+            services.ConfigurePeopleManagementService(new DbSettings { ConnectionString = dbSettings });
+            //TODO: Michael, implentar el servicio de importAndExportJsonService
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

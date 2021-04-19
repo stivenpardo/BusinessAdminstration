@@ -127,7 +127,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
                 AreaId = Guid.Parse(responseAddArea.ToString()),
                 DocumentTypeId = Guid.Parse(responseAddDocumentType.ToString()),
                 IdentificationNumber = 123,
-                PersonName = "Juanita",
+                PersonName = "Juanita44",
                 PersonLastName = "lastName fake",
                 PersonDateOfBirth = DateTimeOffset.Now,
                 CreationDate = DateTimeOffset.Now,
@@ -161,7 +161,7 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             Assert.True(responseDeleteDocumentType);
             Assert.True(responseUpdate);
             Assert.True(responseDeleArea);
-            Assert.True(responseDeleteEmployed);            
+            Assert.True(responseDeleteEmployed);
         }
     }
 }

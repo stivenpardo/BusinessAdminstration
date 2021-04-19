@@ -24,12 +24,12 @@
 
   <ItemGroup>
     <Folder Include="4.Domain\" />
-    <Folder Include="5.Infrastrucutre\5.2Transversal\" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\BusinessAdministration.Aplication.Core\BusinessAdministration.Aplication.Core.csproj" />
     <ProjectReference Include="..\BusinessAdministration.Infrastructure.Data.Persistence.Core\BusinessAdministration.Infrastructure.Data.Persistence.Core.csproj" />
+    <ProjectReference Include="..\BusinessAdministration.Infrastructure.Transversal\BusinessAdministration.Infrastructure.Transversal.csproj" />
   </ItemGroup>
 
 </Project>

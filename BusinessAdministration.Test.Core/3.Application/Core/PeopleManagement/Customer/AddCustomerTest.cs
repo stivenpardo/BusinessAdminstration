@@ -255,7 +255,6 @@ namespace BusinessAdministration.Test.Core._3.Application.Core.PeopleManagement.
             };
 
             var response = await customerSvc.AddCustomer(newCustomer).ConfigureAwait(false);
-            Assert.NotNull(response);
             Assert.NotEqual(default, response);
         }
 

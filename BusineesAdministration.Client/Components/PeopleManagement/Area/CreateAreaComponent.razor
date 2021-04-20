@@ -1,21 +1,27 @@
-﻿<h3>Área</h3>
+﻿@inherits Services.ListAreaBase
 
-@*<MatTable  class="mat-elevation-z5">
-    <MatTableHeader>
-        <th>Id</th>
-        <th>Nombre</th>
-        <th>Empleado Responsable</th>
-    </MatTableHeader>
-    <MatTableRow>
+<h3>Lista de Áreas</h3>
 
-    </MatTableRow>
-</MatTable>
+<div>
+    <table>
+        <thead>
+            <tr>
+                <th> Id </th>
+                <th> Name </th>
+                <th> Id Empleado responsable </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var area in Areas)
+            {
+                <tr>
+                    <td>@area.AreaId</td>
+                    <td>@area.AreaName</td>
+                    <td>@area.LiableEmployerId</td>
+                </tr>
+            }
+        </tbody>
+    </table>
 
-@code
+</div>
 
-{
-
-        
-
-
-}*@

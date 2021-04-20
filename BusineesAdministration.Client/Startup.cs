@@ -1,4 +1,5 @@
 using BusineesAdministration.Client.Components.PeopleManagement.Area.Services;
+using BusinessAdministration.Infrastructure.Transversal.Configurator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,9 +24,17 @@ namespace BusineesAdministration.Client
         {
             services.AddRazorPages();
             services.AddServerSideBlazor();
+            //TODO: Implemented service fot to consume Api
             services.AddHttpClient<IAreaService, AreaService>(area =>
             {
                 area.BaseAddress = new Uri("https://localhost:44386/");
+            });
+            services.ConfigureHttpClientService(new HttpClientSettings
+            {
+                ServiceProtocol = "https",
+                Context = "",
+                Hostname = "localhost",
+                Port = 44386
             });
         }
 

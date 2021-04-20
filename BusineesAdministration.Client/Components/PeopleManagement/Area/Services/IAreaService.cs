@@ -6,6 +6,6 @@ namespace BusineesAdministration.Client.Components.PeopleManagement.Area.Service
 {
     public interface IAreaService
     {
-        Task<IEnumerable<AreaDto>> AreaGetAll();
+        Task<IEnumerable<AreaDto>> GetAllAreas();
     }
 }

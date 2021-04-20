@@ -1,20 +1,19 @@
 ﻿using BusinessAdministration.Aplication.Dto.PeopleManagement.Area;
-using MatBlazor;
+using BusinessAdministration.Infrastructure.Transversal;
 using System.Collections.Generic;
-using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace BusineesAdministration.Client.Components.PeopleManagement.Area.Services
 {
     public class AreaService : IAreaService
     {
-        private readonly HttpClient _httpClient;
+        private readonly IHttpGenericBaseClient _httpClient;
 
-        public AreaService(HttpClient httpClient) => _httpClient = httpClient;
+        public AreaService(IHttpGenericBaseClient httpClient) => _httpClient = httpClient;
 
         private const string UrlController = "/api/area";
-        public async Task<IEnumerable<AreaDto>> AreaGetAll() =>
-            await _httpClient.GetJsonAsync<AreaDto[]>($"{UrlController}/getallareas")
-            .ConfigureAwait(false);
+        public async Task<IEnumerable<AreaDto>> GetAllAreas() =>
+            await _httpClient.Get<IEnumerable<AreaDto>>("getallareas")
+            .ConfigureAwait(true);
     }
 }

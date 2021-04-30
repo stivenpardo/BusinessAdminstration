@@ -14,6 +14,7 @@ namespace BusinessAdministration.Infrastructure.Transversal
     public class HttpGenericBaseClient : IHttpGenericBaseClient
     {
         private readonly HttpClient _client;
+        private readonly string urlBase;
 
         public HttpGenericBaseClient(
             HttpClient client,
@@ -21,12 +22,13 @@ namespace BusinessAdministration.Infrastructure.Transversal
         {
             _client = client ?? throw new ClientNotEspecificateException();
             if (settings.Value.GetServiceUrl() == null) throw new UriFormatException();
-            _client.BaseAddress = settings.Value.GetServiceUrl();
+            urlBase = settings.Value.GetServiceUrl().ToString();
+            //_client.BaseAddress = settings.Value.GetServiceUrl();
         }
         public async Task<T> Get<T>(string path) where T : class
         {
             ValidateNotNullPath(path);
-            var response = await _client.GetAsync(path).ConfigureAwait(false);
+            var response = await _client.GetAsync($"{urlBase}{path}").ConfigureAwait(false);
             ValidateUserUnauthorized(response);
             response.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));

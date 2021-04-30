@@ -1,11 +1,10 @@
-using BusineesAdministration.Client.Components.PeopleManagement.Area.Services;
+using BusinessAdministration.Aplication.Core.ClientesHttp;
 using BusinessAdministration.Infrastructure.Transversal.Configurator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using System;
 
 namespace BusineesAdministration.Client
 {
@@ -25,14 +24,15 @@ namespace BusineesAdministration.Client
             services.AddRazorPages();
             services.AddServerSideBlazor();
             //TODO: Implemented service fot to consume Api
-            services.AddHttpClient<IAreaService, AreaService>(area =>
-            {
-                area.BaseAddress = new Uri("https://localhost:44386/");
-            });
+            //services.AddHttpClient<IAreaService, AreaService>(area =>
+            //{
+            //    area.BaseAddress = new Uri("https://localhost:44386/");
+            //});
+            services.AddTransient<IAreaClienteHttp, AreaClienteHttp>();
             services.ConfigureHttpClientService(new HttpClientSettings
             {
                 ServiceProtocol = "https",
-                Context = "",
+                Context = "api",
                 Hostname = "localhost",
                 Port = 44386
             });

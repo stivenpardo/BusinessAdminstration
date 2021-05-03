@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace BusinessAdministration.Aplication.Core.ClientesHttp
+namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.HttpClientArea
 {
     public class AreaClienteHttp : HttpClientGenericBase<AreaDto>, IAreaClienteHttp
     {

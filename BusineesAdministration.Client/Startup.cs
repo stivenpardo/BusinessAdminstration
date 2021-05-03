@@ -1,4 +1,4 @@
-using BusinessAdministration.Aplication.Core.ClientesHttp;
+using BusinessAdministration.Aplication.Core.PeopleManagement.Area.HttpClientArea;
 using BusinessAdministration.Infrastructure.Transversal.Configurator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

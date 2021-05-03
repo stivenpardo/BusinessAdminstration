@@ -8,7 +8,7 @@ namespace BusinessAdministration.Infrastructure.Transversal
     {
         Task<IEnumerable<T>> Get(string action);
 
-        Task<T> Post(T request);
+        Task<T> Post(T request, string action);
 
         Task<T> Put(T request);
 

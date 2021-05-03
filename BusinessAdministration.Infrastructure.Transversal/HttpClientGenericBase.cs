@@ -36,12 +36,12 @@ namespace BusinessAdministration.Infrastructure.Transversal
             response.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<IEnumerable<T>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
-        public async Task<T> Post(T request)
+        public async Task<T> Post(T request, string accion)
         {
             ValidateNotNullPath(Controller);
             var stringRequest = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var response = await _client.PostAsync(Controller, stringRequest).ConfigureAwait(false);
+            var response = await _client.PostAsync($"{baseUrl}{Controller}/{accion}", stringRequest).ConfigureAwait(false);
             ValidateUserUnauthorized(response);
             response.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));

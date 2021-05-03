@@ -9,7 +9,7 @@ namespace BusineesAdministration.Client.Components.PeopleManagement.DocumentType
     public partial class DocumentTypeComponent : ComponentBase
     {
         [Inject]
-        public IDocumentTypeHttpClient ClientDocumentYpe { get; set; }
+        public IDocumentTypeHttpClient ClientDocumenType { get; set; }
 
         public IEnumerable<DocumentTypeDto> ListDocumentType { get; set; } = new List<DocumentTypeDto>();
 
@@ -17,7 +17,7 @@ namespace BusineesAdministration.Client.Components.PeopleManagement.DocumentType
         {
             if (firstRender)
             {
-                var response = await ClientDocumentYpe.GetAll().ConfigureAwait(false);
+                var response = await ClientDocumenType.GetAll().ConfigureAwait(false);
                 ListDocumentType = response ?? new List<DocumentTypeDto>();
                 await InvokeAsync(StateHasChanged).ConfigureAwait(false);
             }

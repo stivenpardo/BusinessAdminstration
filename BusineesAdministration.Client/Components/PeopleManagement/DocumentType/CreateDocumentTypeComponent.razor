@@ -1,0 +1,14 @@
+﻿@page "/documentType/create"
+<h3>Crear document type</h3>
+<EditForm Model="ObjDocumentType" OnValidSubmit="Success">
+    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+        <p>
+            <MatTextField Label="Last name" @bind-Value="ObjDocumentType.DocumentType" />
+        </p>
+    </div>
+    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+        <MatButton Type="submit" Raised="true">Crear</MatButton>
+    </div>
+    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+    </div>
+</EditForm>

@@ -1,0 +1,19 @@
+﻿* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-size: 62.5%;
+}
+
+.HeadTitle {
+    display: flex;
+    font-size: 4rem;
+    justify-content: space-between;
+    border-block: double solid;
+    box-shadow: inherit;
+}
+
+.LogoSicnAppWeb {
+    width: 7rem;
+    height: 5em;
+}

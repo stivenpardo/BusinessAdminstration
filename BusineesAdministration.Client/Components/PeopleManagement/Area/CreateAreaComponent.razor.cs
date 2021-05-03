@@ -10,6 +10,7 @@ namespace BusineesAdministration.Client.Components.PeopleManagement.Area
     {
         [Inject]
         public IAreaClienteHttp ClienteHttp { get; set; }
+
         public IEnumerable<AreaDto> Areas { get; set; } = new List<AreaDto>();
 
         protected override async Task OnAfterRenderAsync(bool firstRender)

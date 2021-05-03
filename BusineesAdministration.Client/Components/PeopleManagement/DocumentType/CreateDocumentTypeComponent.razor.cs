@@ -11,8 +11,10 @@ namespace BusineesAdministration.Client.Components.PeopleManagement.DocumentType
     {
         [Inject]
         public IDocumentTypeHttpClient ClientDocumentType { get; set; }
+
         [Inject]
         private IJSRuntime Js { get; set; }
+
         private DocumentTypeDto ObjDocumentType { get; set; } = new();
 
         private async Task Success()

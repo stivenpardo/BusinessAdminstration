@@ -1,5 +1,4 @@
-﻿using BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType;
-using BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.Services;
+﻿using BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.Services;
 using BusinessAdministration.Aplication.Dto.PeopleManagement.DocumentType;
 using System;
 using System.Collections.Generic;

@@ -14,6 +14,9 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.H
 
         protected override string Controller { get => "/DocumentType"; }
 
+        public async Task<DocumentTypeDto> Create(DocumentTypeDto request) =>
+            await Post(request).ConfigureAwait(false);
+
         public async Task<IEnumerable<DocumentTypeDto>> GetAll() =>
             await Get("getalldocumenttypes").ConfigureAwait(false);
     }

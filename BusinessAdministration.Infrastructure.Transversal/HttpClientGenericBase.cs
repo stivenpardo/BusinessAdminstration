@@ -36,6 +36,16 @@ namespace BusinessAdministration.Infrastructure.Transversal
             response.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<IEnumerable<T>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
+        public async Task<T> Post(T request)
+        {
+            ValidateNotNullPath(Controller);
+            var stringRequest = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var response = await _client.PostAsync(Controller, stringRequest).ConfigureAwait(false);
+            ValidateUserUnauthorized(response);
+            response.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        }
 
         public async Task<T> Patch(T request)
         {
@@ -48,16 +58,6 @@ namespace BusinessAdministration.Infrastructure.Transversal
             return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
-        public async Task<T> Post(T request)
-        {
-            ValidateNotNullPath(Controller);
-            var stringRequest = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
-            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var response = await _client.PostAsync(Controller, stringRequest).ConfigureAwait(false);
-            ValidateUserUnauthorized(response);
-            response.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
-        }
 
         public async Task<T> Put(T request)
         {

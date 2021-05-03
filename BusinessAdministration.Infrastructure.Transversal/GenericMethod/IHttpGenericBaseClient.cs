@@ -1,7 +1,7 @@
 ﻿using BusinessAdministration.Aplication.Dto.Base;
 using System.Threading.Tasks;
 
-namespace BusinessAdministration.Infrastructure.Transversal
+namespace BusinessAdministration.Infrastructure.Transversal.GenericMethod
 {
     public interface IHttpGenericBaseClient
     {

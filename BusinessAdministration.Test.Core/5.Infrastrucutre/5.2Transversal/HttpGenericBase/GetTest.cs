@@ -1,6 +1,6 @@
-﻿using BusinessAdministration.Infrastructure.Transversal;
-using BusinessAdministration.Infrastructure.Transversal.Configurator;
+﻿using BusinessAdministration.Infrastructure.Transversal.Configurator;
 using BusinessAdministration.Infrastructure.Transversal.Exceptions;
+using BusinessAdministration.Infrastructure.Transversal.GenericMethod;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Moq.Protected;

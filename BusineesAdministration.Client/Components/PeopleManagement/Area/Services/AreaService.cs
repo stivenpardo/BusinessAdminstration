@@ -1,5 +1,5 @@
 ﻿using BusinessAdministration.Aplication.Dto.PeopleManagement.Area;
-using BusinessAdministration.Infrastructure.Transversal;
+using BusinessAdministration.Infrastructure.Transversal.GenericMethod;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

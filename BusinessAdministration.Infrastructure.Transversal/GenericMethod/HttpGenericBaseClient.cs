@@ -9,7 +9,7 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinessAdministration.Infrastructure.Transversal
+namespace BusinessAdministration.Infrastructure.Transversal.GenericMethod
 {
     public class HttpGenericBaseClient : IHttpGenericBaseClient
     {

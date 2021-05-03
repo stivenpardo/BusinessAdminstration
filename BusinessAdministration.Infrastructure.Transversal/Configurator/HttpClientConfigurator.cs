@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using BusinessAdministration.Infrastructure.Transversal.GenericMethod;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BusinessAdministration.Infrastructure.Transversal.Configurator
 {

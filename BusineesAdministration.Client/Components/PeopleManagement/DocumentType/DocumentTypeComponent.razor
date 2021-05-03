@@ -1,12 +1,14 @@
-﻿<h3>Gestión de tipo de documento</h3>
+﻿@page "/documenttype"
+<h3>Gestión de tipo de documento</h3>
 
-<MatTable Items="@cars" class="mat-elevation-z5">
+<MatTable Items="@ListDocumentType" class="mat-elevation-z5">
     <MatTableHeader>
         <th>Id</th>
         <th>Nombre del tipo de documento</th>
     </MatTableHeader>
     <MatTableRow>
-
+        <td>@context.DocumentTypeId</td>
+        <td>@context.DocumentType</td>
     </MatTableRow>
     @*<MatTableRow>
         <td>@context.Name</td>
@@ -15,7 +17,7 @@
     </MatTableRow>*@
 </MatTable>
 
-@code
+@*@code
         {
 
     public class Car
@@ -43,4 +45,4 @@
                 new Car("Ford Mondeo", 16000, 120),
             };
 
-}
+}*@

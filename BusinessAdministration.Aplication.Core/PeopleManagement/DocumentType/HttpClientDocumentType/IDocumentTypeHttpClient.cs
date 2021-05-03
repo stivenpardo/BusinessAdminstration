@@ -7,5 +7,6 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.H
     public interface IDocumentTypeHttpClient
     {
         Task<IEnumerable<DocumentTypeDto>> GetAll();
+        Task<DocumentTypeResponseDto> Create();
     }
 }

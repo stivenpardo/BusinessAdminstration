@@ -20,7 +20,7 @@ namespace BusineesAdministration.Client.Components.PeopleManagement.Area
                 Areas = response ?? new List<AreaDto>();
                 await InvokeAsync(StateHasChanged).ConfigureAwait(false);
             }
-            await base.OnAfterRenderAsync(firstRender);
+            await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
         }
     }
 }

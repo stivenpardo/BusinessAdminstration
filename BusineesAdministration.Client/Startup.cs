@@ -1,4 +1,5 @@
 using BusinessAdministration.Aplication.Core.PeopleManagement.Area.HttpClientArea;
+using BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.HttpClientDocumentType;
 using BusinessAdministration.Infrastructure.Transversal.Configurator;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -29,6 +30,7 @@ namespace BusineesAdministration.Client
             //    area.BaseAddress = new Uri("https://localhost:44386/");
             //});
             services.AddTransient<IAreaClienteHttp, AreaClienteHttp>();
+            services.AddTransient<IDocumentTypeHttpClient, DocumentTypeHttpClient>();
             services.ConfigureHttpClientService(new HttpClientSettings
             {
                 ServiceProtocol = "https",

@@ -8,5 +8,8 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.H
     {
         Task<IEnumerable<DocumentTypeDto>> GetAll();
         Task<DocumentTypeDto> Create(DocumentTypeDto request);
+
+        Task<DocumentTypeDto> Update(DocumentTypeDto request);
+        Task<DocumentTypeDto> Delete();
     }
 }

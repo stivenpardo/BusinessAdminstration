@@ -28,11 +28,11 @@ namespace BusinessAdministration.WebApi.Controllers
         public async Task<IEnumerable<DocumentTypeDto>> GetAllDocumentTypes() =>
              await _documentTypeFacade.GetAllDocumentTypes().ConfigureAwait(false);
 
-        [HttpPost(nameof(UpdateDocumentType))]
+        [HttpPut(nameof(UpdateDocumentType))]
         public DocumentTypeResponseDto UpdateDocumentType(DocumentTypeDto request) =>
             _documentTypeFacade.UpdateDocumentType(request);
 
-        [HttpPost(nameof(DeleteDocumentType))]
+        [HttpDelete(nameof(DeleteDocumentType))]
         public DocumentTypeResponseDto DeleteDocumentType(DocumentTypeDto request) =>
             _documentTypeFacade.DeleteDocumentType(request);
     }

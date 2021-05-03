@@ -14,10 +14,17 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.H
 
         protected override string Controller { get => "/DocumentType"; }
 
+        public async Task<IEnumerable<DocumentTypeDto>> GetAll() =>
+            await Get("getalldocumenttypes").ConfigureAwait(false);
+
         public async Task<DocumentTypeDto> Create(DocumentTypeDto request) =>
             await Post(request, "CreateDocumentType").ConfigureAwait(false);
 
-        public async Task<IEnumerable<DocumentTypeDto>> GetAll() =>
-            await Get("getalldocumenttypes").ConfigureAwait(false);
+
+        public async Task<DocumentTypeDto> Update(DocumentTypeDto request) =>
+            await Put(request, "UpdateDocumentType").ConfigureAwait(false);
+
+        public async Task<DocumentTypeDto> Delete() =>
+            await Delete("DeleteDocumentType").ConfigureAwait(false);
     }
 }

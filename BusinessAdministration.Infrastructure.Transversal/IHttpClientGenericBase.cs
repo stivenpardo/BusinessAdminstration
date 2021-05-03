@@ -10,10 +10,10 @@ namespace BusinessAdministration.Infrastructure.Transversal
 
         Task<T> Post(T request, string action);
 
-        Task<T> Put(T request);
+        Task<T> Put(T request, string action);
 
-        Task<T> Patch(T request);
+        Task<T> Patch(T request, string action);
 
-        public Task<T> Delete();
+        public Task<T> Delete(string action);
     }
 }

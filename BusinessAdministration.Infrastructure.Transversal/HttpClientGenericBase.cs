@@ -28,51 +28,52 @@ namespace BusinessAdministration.Infrastructure.Transversal
             baseUrl = settings.Value.GetServiceUrl().ToString();
         }
 
-        public async Task<IEnumerable<T>> Get(string accion)
+        public async Task<IEnumerable<T>> Get(string action)
         {
-            ValidateNotNullPath(accion);
-            var response = await _client.GetAsync($"{baseUrl}{Controller}/{accion}").ConfigureAwait(false);
+            ValidateNotNullPath(Controller);
+            var response = await _client.GetAsync($"{baseUrl}{Controller}/{action}").ConfigureAwait(false);
             ValidateUserUnauthorized(response);
             response.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<IEnumerable<T>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
-        public async Task<T> Post(T request, string accion)
+        public async Task<T> Post(T request, string action)
         {
             ValidateNotNullPath(Controller);
             var stringRequest = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var response = await _client.PostAsync($"{baseUrl}{Controller}/{accion}", stringRequest).ConfigureAwait(false);
+            var response = await _client.PostAsync($"{baseUrl}{Controller}/{action}", stringRequest).ConfigureAwait(false);
+            ValidateUserUnauthorized(response);
+            response.EnsureSuccessStatusCode();
+            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        }
+        public async Task<T> Put(T request, string action)
+        {
+            ValidateNotNullPath(Controller);
+            var stringRequest = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
+            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var response = await _client.PutAsync($"{baseUrl}{Controller}/{action}", stringRequest).ConfigureAwait(false);
             ValidateUserUnauthorized(response);
             response.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
-        public async Task<T> Patch(T request)
+        public async Task<T> Patch(T request, string action)
         {
             ValidateNotNullPath(Controller);
             var stringRequest = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var response = await _client.PatchAsync(Controller, stringRequest).ConfigureAwait(false);
+            var response = await _client.PatchAsync($"{baseUrl}{Controller}/{action}", stringRequest).ConfigureAwait(false);
             ValidateUserUnauthorized(response);
             response.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
 
-        public async Task<T> Put(T request)
+        public async Task<T> Delete(string action)
         {
+            //Todo: Michael, review method
             ValidateNotNullPath(Controller);
-            var stringRequest = new StringContent(JsonConvert.SerializeObject(request), Encoding.UTF8, "application/json");
-            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            var response = await _client.PutAsync(Controller, stringRequest).ConfigureAwait(false);
-            ValidateUserUnauthorized(response);
-            response.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
-        }
-        public async Task<T> Delete()
-        {
-            ValidateNotNullPath(Controller);
-            var response = await _client.DeleteAsync(Controller).ConfigureAwait(false);
+            var response = await _client.DeleteAsync($"{baseUrl}{Controller}/{action}").ConfigureAwait(false);
             ValidateUserUnauthorized(response);
             response.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));

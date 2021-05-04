@@ -1,13 +1,17 @@
 ﻿@page "/documenttype"
 <h3>Gestión de tipo de documento</h3>
-
-<MatTable Items="@ListDocumentType" class="mat-elevation-z5">
-    <MatTableHeader>
-        <th>Id</th>
-        <th>Nombre del tipo de documento</th>
-    </MatTableHeader>
-    <MatTableRow>
-        <td>@context.DocumentTypeId</td>
-        <td>@context.DocumentType</td>
-    </MatTableRow>
-</MatTable>
+<div>
+    <MatButton Raised="true" OnClick="NavigationTo"> Crear tipo de documento</MatButton>
+</div>
+<div>
+    <MatTable Items="@ListDocumentType" class="mat-elevation-z5">
+        <MatTableHeader>
+            <th>Id</th>
+            <th>Nombre del tipo de documento</th>
+        </MatTableHeader>
+        <MatTableRow>
+            <td>@context.DocumentTypeId</td>
+            <td>@context.DocumentType</td>
+        </MatTableRow>
+    </MatTable>
+</div>

@@ -10,6 +10,8 @@ namespace BusineesAdministration.Client.Components.PeopleManagement.DocumentType
     {
         [Inject]
         public IDocumentTypeHttpClient ClientDocumenType { get; set; }
+        [Inject]
+        public NavigationManager NavManager { get; set; }
 
         public IEnumerable<DocumentTypeDto> ListDocumentType { get; set; } = new List<DocumentTypeDto>();
 
@@ -23,5 +25,7 @@ namespace BusineesAdministration.Client.Components.PeopleManagement.DocumentType
             }
             await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
         }
+
+        protected void NavigationTo() => NavManager.NavigateTo("documentType/create");
     }
 }

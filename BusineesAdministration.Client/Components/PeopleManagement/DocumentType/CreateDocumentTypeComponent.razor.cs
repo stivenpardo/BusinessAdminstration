@@ -20,7 +20,7 @@ namespace BusineesAdministration.Client.Components.PeopleManagement.DocumentType
         private async Task Success()
         {
             var response = await ClientDocumentType.Create(ObjDocumentType).ConfigureAwait(false);
-            if (string.Equals(response.StatusCode.ToString(), "authorized", StringComparison.OrdinalIgnoreCase))
+            if (string.Equals(response.StatusCode.ToString(), "ok", StringComparison.OrdinalIgnoreCase))
             {
                 await Js.InvokeAsync<object>("alert", "Registro exitoso").ConfigureAwait(false);
                 await InvokeAsync(StateHasChanged).ConfigureAwait(false);

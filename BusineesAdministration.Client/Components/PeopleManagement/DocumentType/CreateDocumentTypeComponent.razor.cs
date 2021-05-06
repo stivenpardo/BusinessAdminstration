@@ -12,8 +12,9 @@ namespace BusineesAdministration.Client.Components.PeopleManagement.DocumentType
         [Inject]
         public IDocumentTypeHttpClient ClientDocumentType { get; set; }
 
-        [Inject]
-        private IJSRuntime Js { get; set; }
+        [Inject] private IJSRuntime Js { get; set; }
+
+        [Inject] NavigationManager NavManager { get; set; }
 
         private DocumentTypeDto ObjDocumentType { get; set; } = new();
 
@@ -23,6 +24,7 @@ namespace BusineesAdministration.Client.Components.PeopleManagement.DocumentType
             if (string.Equals(response.StatusCode.ToString(), "ok", StringComparison.OrdinalIgnoreCase))
             {
                 await Js.InvokeAsync<object>("alert", "Registro exitoso").ConfigureAwait(false);
+                NavManager.NavigateTo("documenttype");
                 await InvokeAsync(StateHasChanged).ConfigureAwait(false);
             }
         }

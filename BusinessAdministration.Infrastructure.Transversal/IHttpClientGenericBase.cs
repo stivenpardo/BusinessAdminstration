@@ -14,6 +14,6 @@ namespace BusinessAdministration.Infrastructure.Transversal
 
         Task<T> Patch(T request, string action);
 
-        public Task<T> Delete(string action);
+        public Task<T> Delete(T request, string action);
     }
 }

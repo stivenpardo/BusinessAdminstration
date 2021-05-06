@@ -36,6 +36,7 @@ namespace BusinessAdministration.Infrastructure.Transversal
             response.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<IEnumerable<T>>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
+
         public async Task<T> Post(T request, string action)
         {
             ValidateNotNullPath(Controller);
@@ -46,6 +47,7 @@ namespace BusinessAdministration.Infrastructure.Transversal
             response.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
+
         public async Task<T> Put(T request, string action)
         {
             ValidateNotNullPath(Controller);
@@ -68,12 +70,11 @@ namespace BusinessAdministration.Infrastructure.Transversal
             return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));
         }
 
-
-        public async Task<T> Delete(string action)
+        public async Task<T> Delete(T request, string action)
         {
             //Todo: Michael, review method
             ValidateNotNullPath(Controller);
-            var response = await _client.DeleteAsync($"{baseUrl}{Controller}/{action}").ConfigureAwait(false);
+            var response = await _client.DeleteAsync($"{baseUrl}{Controller}/{action}/{request}").ConfigureAwait(false);
             ValidateUserUnauthorized(response);
             response.EnsureSuccessStatusCode();
             return JsonConvert.DeserializeObject<T>(await response.Content.ReadAsStringAsync().ConfigureAwait(false));

@@ -10,7 +10,9 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.H
 {
     public class DocumentTypeHttpClient : HttpClientGenericBase<DocumentTypeDto>, IDocumentTypeHttpClient
     {
-        public DocumentTypeHttpClient(HttpClient client, IOptions<HttpClientSettings> settings) : base(client, settings) { }
+        public DocumentTypeHttpClient(HttpClient client, IOptions<HttpClientSettings> settings) : base(client, settings)
+        {
+        }
 
         protected override string Controller { get => "/DocumentType"; }
 
@@ -24,7 +26,7 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.H
         public async Task<DocumentTypeDto> Update(DocumentTypeDto request) =>
             await Put(request, "UpdateDocumentType").ConfigureAwait(false);
 
-        public async Task<DocumentTypeDto> Delete() =>
-            await Delete("DeleteDocumentType").ConfigureAwait(false);
+        public async Task<DocumentTypeDto> Delete(DocumentTypeDto request) =>
+            await Delete(request, "DeleteDocumentType").ConfigureAwait(false);
     }
 }

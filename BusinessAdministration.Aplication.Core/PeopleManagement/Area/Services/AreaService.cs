@@ -49,7 +49,7 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services
         public async Task<IEnumerable<AreaDto>> GetAll()
         {
             var response = _mapper.Map<IEnumerable<AreaDto>>(_repoArea.GetAll<AreaEntity>());
-            if (response.Count() == 0) throw new AreaEntityIsEmptyException();
+            if (!response.Any()) throw new AreaEntityIsEmptyException();
             return response;
         }
 
@@ -82,7 +82,7 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.Area.Services
         }
         private static void ValidateAreIdRequired(AreaDto request)
         {
-            if (request.AreaId == Guid.Empty) 
+            if (request.AreaId == Guid.Empty)
                 throw new AreaIdNotDefinedException();
         }
         private void ValidationAreIdExist(AreaDto request)

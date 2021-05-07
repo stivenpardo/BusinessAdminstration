@@ -1,4 +1,5 @@
 ﻿using BusinessAdministration.Aplication.Dto.PeopleManagement.DocumentType;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,6 +9,7 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType
     {
         public Task<DocumentTypeResponseDto> CreateDocumentType(DocumentTypeDto request);
         public Task<IEnumerable<DocumentTypeDto>> GetAllDocumentTypes();
+        public Task<DocumentTypeDto> GetById(Guid id);
         public DocumentTypeResponseDto UpdateDocumentType(DocumentTypeDto request);
         public DocumentTypeResponseDto DeleteDocumentType(DocumentTypeDto request);
         public Task<string> DocumentTypeExportAll();

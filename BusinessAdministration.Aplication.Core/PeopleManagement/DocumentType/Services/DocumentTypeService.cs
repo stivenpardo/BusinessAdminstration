@@ -20,6 +20,22 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.S
             _repoDocumentType = repo;
             _mapper = mapper;
         }
+        public async Task<IEnumerable<DocumentTypeDto>> GetAll()
+        {
+            var response = await Task.FromResult(_mapper.Map<IEnumerable<DocumentTypeDto>>(_repoDocumentType.GetAll<DocumentTypeEntity>()));
+            if (response.Count() == 0) throw new DocumentTypeEntityIsEmptyException();
+            return response;
+        }
+        public async Task<DocumentTypeDto> GetById(Guid id)
+        {
+            if (id == Guid.Empty) throw new DontExistIdException();
+            var searchById = _repoDocumentType
+                .SearchMatchingOneResult<DocumentTypeEntity>(d => d.DocumentTypeId == id);
+            if (searchById == null || searchById == default)
+                throw new NoExistDocumentTypeException();
+
+            return await Task.FromResult(_mapper.Map<DocumentTypeDto>(searchById)).ConfigureAwait(false);
+        }
 
         public async Task<Guid?> AddDocumentType(DocumentTypeDto request)
         {
@@ -27,19 +43,6 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.S
             var response = await _repoDocumentType.Insert(_mapper.Map<DocumentTypeEntity>(request)).ConfigureAwait(false);
             return response.DocumentTypeId;
         }
-        public bool DeleteDocumentType(DocumentTypeDto request)
-        {
-            ValidateRequireDocumentype(request);
-            ValidateDocumentTypeIdExist(request);
-            return _repoDocumentType.Delete(_mapper.Map<DocumentTypeEntity>(request));
-        }
-        public async Task<IEnumerable<DocumentTypeDto>> GetAll()
-        {
-            var response = await Task.FromResult(_mapper.Map<IEnumerable<DocumentTypeDto>>(_repoDocumentType.GetAll<DocumentTypeEntity>()));
-            if (response.Count() == 0) throw new DocumentTypeEntityIsEmptyException();
-            return response;
-        }
-
         public bool UpdateDocumentType(DocumentTypeDto request)
         {
             ValidateRequireDocumentype(request);
@@ -50,6 +53,14 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.S
             entityUpdate.DocumentType = request.DocumentType;
             return _repoDocumentType.Update(entityUpdate);
         }
+        public bool DeleteDocumentType(DocumentTypeDto request)
+        {
+            ValidateRequireDocumentype(request);
+            ValidateDocumentTypeIdExist(request);
+            return _repoDocumentType.Delete(_mapper.Map<DocumentTypeEntity>(request));
+        }
+
+        #region Validations
         private void ValidateDocumentTypeIdExist(DocumentTypeDto request)
         {
             var documentTypeIdExist = _repoDocumentType
@@ -60,5 +71,7 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.S
         {
             if (request.DocumentTypeId == Guid.Empty) throw new DocumentTypeIdNotDefinedException();
         }
+
+        #endregion Validations
     }
 }

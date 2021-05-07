@@ -2,6 +2,7 @@
 using BusinessAdministration.Infrastructure.Transversal;
 using BusinessAdministration.Infrastructure.Transversal.Configurator;
 using Microsoft.Extensions.Options;
+using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -19,14 +20,16 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType.H
         public async Task<IEnumerable<DocumentTypeDto>> GetAll() =>
             await Get("getalldocumenttypes").ConfigureAwait(false);
 
+        public async Task<DocumentTypeDto> GetById(Guid id) =>
+            await GetById(id, "getbyid").ConfigureAwait(false);
+
         public async Task<DocumentTypeDto> Create(DocumentTypeDto request) =>
             await Post(request, "CreateDocumentType").ConfigureAwait(false);
-
 
         public async Task<DocumentTypeDto> Update(DocumentTypeDto request) =>
             await Put(request, "UpdateDocumentType").ConfigureAwait(false);
 
-        public async Task<DocumentTypeDto> Delete(DocumentTypeDto request) =>
-            await Delete(request, "DeleteDocumentType").ConfigureAwait(false);
+        public async Task<DocumentTypeDto> Delete(Guid id) =>
+            await Delete(id, "DeleteDocumentType").ConfigureAwait(false);
     }
 }

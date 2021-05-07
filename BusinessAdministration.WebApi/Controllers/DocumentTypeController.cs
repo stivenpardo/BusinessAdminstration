@@ -2,6 +2,7 @@
 using BusinessAdministration.Aplication.Dto.PeopleManagement.DocumentType;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -27,6 +28,10 @@ namespace BusinessAdministration.WebApi.Controllers
         [HttpGet(nameof(GetAllDocumentTypes))]
         public async Task<IEnumerable<DocumentTypeDto>> GetAllDocumentTypes() =>
              await _documentTypeFacade.GetAllDocumentTypes().ConfigureAwait(false);
+
+        [HttpGet(nameof(GetById))]
+        public async Task<DocumentTypeDto> GetById(Guid id) =>
+             await _documentTypeFacade.GetById(id).ConfigureAwait(false);
 
         [HttpPut(nameof(UpdateDocumentType))]
         public DocumentTypeResponseDto UpdateDocumentType(DocumentTypeDto request) =>

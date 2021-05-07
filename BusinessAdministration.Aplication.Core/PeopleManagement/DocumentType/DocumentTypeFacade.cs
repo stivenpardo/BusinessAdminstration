@@ -33,6 +33,9 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType
             };
         }
         public Task<IEnumerable<DocumentTypeDto>> GetAllDocumentTypes() => _documentTypeSVC.GetAll();
+        public async Task<DocumentTypeDto> GetById(Guid id) =>
+            await _documentTypeSVC.GetById(id).ConfigureAwait(false);
+
         public DocumentTypeResponseDto UpdateDocumentType(DocumentTypeDto request)
         {
             var response = _documentTypeSVC.UpdateDocumentType(request);
@@ -48,5 +51,6 @@ namespace BusinessAdministration.Aplication.Core.PeopleManagement.DocumentType
         public async Task<IEnumerable<DocumentTypeDto>> DocumentTypeImportAll() =>
             //await _documentTypeSVC.ImportAll().ConfigureAwait(false);
             throw new Exception();
+
     }
 }

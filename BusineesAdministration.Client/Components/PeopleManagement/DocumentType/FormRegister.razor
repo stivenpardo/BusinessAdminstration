@@ -1,0 +1,18 @@
+﻿
+@*TODO:Michael, review how to pass parameters of the success*@
+<EditForm Model="@ObjDocumentType" OnValidSubmit="@Success">
+    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+
+        <p>
+            <MatTextField Label="@NameField1" @bind-Value="@ObjDocumentType.DocumentType" />
+        </p>
+
+    </div>
+    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+        <MatButton Type="submit" Raised="true">@NameButton</MatButton>
+    </div>
+    <div class="mat-layout-grid-cell mat-layout-grid-cell-span-4">
+    </div>
+</EditForm>
+
+

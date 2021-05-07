@@ -25,7 +25,6 @@ namespace BusineesAdministration.Client.Components.PeopleManagement.DocumentType
             }
             await base.OnAfterRenderAsync(firstRender).ConfigureAwait(false);
         }
-
         protected void NavigationTo() => NavManager.NavigateTo("documentType/create");
     }
 }

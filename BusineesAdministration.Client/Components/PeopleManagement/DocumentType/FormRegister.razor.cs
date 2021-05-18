@@ -13,5 +13,7 @@ namespace BusineesAdministration.Client.Components.PeopleManagement.DocumentType
 
         [Parameter]
         public DocumentTypeDto ObjDocumentType { get; set; } = new();
+
+        public void Success() { }
     }
 }
